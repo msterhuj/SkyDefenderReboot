@@ -1,0 +1,16 @@
+name: SkyDefenderReboot
+version: '${project.version}'
+main: net.msterhuj.skydefenderreboot.SkyDefenderReboot
+api-version: '1.20'
+prefix: SDR
+authors: [MsterHuj]
+description: A adaptation of skydefender game mode
+commands:
+  skydefenderreboot:
+    description: Open skydefenderreboot interface
+    usage: /skydefenderreboot
+    aliases:
+      - sdr
+      - skydefender
+      - sk
+      - sky
