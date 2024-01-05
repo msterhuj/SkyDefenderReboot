@@ -32,11 +32,23 @@ public class TeamCommands {
         if (strings[1].equalsIgnoreCase("list")) {
             commandSender.sendMessage("§cList of teams:");
             for (TeamType teamType : TeamType.values()) {
+                // player is in a team
                 if (teamPlayer != null && teamPlayer.getTeamType() == teamType) {
                     commandSender.sendMessage("§a- " + teamType.getName());
+                    for (TeamPlayer inTeam : teamManager.getTeamPlayers()) {
+                        if (inTeam.getTeamType() == teamType) {
+                            commandSender.sendMessage("§7-> " + inTeam.getPseudo());
+                        }
+                    }
                     continue;
                 }
+                // player is not in that's team
                 commandSender.sendMessage("§c- " + teamType.getName());
+                for (TeamPlayer inTeam : teamManager.getTeamPlayers()) {
+                    if (inTeam.getTeamType() == teamType) {
+                        commandSender.sendMessage("§7-> " + inTeam.getPseudo());
+                    }
+                }
             }
             return true;
         }
@@ -59,6 +71,7 @@ public class TeamCommands {
             teamManager.addPlayerToTeam(player, teamType);
             plugin.saveData();
             commandSender.sendMessage("§aYou joined the team " + teamType.getName());
+            return true;
         }
 
         if (strings[1].equalsIgnoreCase("leave")) {
