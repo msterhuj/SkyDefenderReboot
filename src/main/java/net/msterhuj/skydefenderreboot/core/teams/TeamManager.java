@@ -2,9 +2,13 @@ package net.msterhuj.skydefenderreboot.core.teams;
 
 
 import lombok.Data;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 @Data
@@ -40,6 +44,32 @@ public class TeamManager {
         if (teamPlayer != null) {
             teamPlayer.setTeamType(TeamType.SPECTATOR);
         }
+    }
+
+    public Location getRandomHighestSafeLocation(World world, int minX, int maxX, int minZ, int maxZ) {
+        Random random = new Random();
+        int x = random.nextInt(minX, maxX);
+        int z = random.nextInt(minZ, maxZ);
+        Location location = world.getHighestBlockAt(x, z).getLocation();
+        if (location.getBlock().isLiquid()) {
+            return getRandomHighestSafeLocation(world, minX, maxX, minZ, maxZ);
+        }
+        return location;
+    }
+
+    public void spreadPlayers() {
+        //Player[] attackers = getPlayers(TeamType.ATTACKER);
+        //Player[] defenders = getPlayers(TeamType.DEFENDER);
+        //Player[] spectators = getPlayers(TeamType.SPECTATOR);
+
+
+    }
+
+    private Player[] getPlayers(TeamType teamType) {
+        return teamPlayers.stream()
+                .filter(teamPlayer -> teamPlayer.getTeamType().equals(teamType))
+                .map(TeamPlayer::getPlayerByUUID)
+                .toArray(Player[]::new);
     }
 
     public TeamPlayer getTeamPlayer(Player player) {

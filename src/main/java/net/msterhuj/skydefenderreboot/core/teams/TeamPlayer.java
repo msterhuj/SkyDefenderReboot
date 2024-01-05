@@ -1,6 +1,8 @@
 package net.msterhuj.skydefenderreboot.core.teams;
 
 import lombok.Data;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -14,5 +16,9 @@ public class TeamPlayer {
 
     public TeamPlayer() {
         this.isAlive = true;
+    }
+
+    public Player getPlayerByUUID() {
+        return Bukkit.getPlayer(uuid);
     }
 }

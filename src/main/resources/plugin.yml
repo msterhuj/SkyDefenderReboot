@@ -14,3 +14,6 @@ commands:
       - skydefender
       - sk
       - sky
+  test:
+    description: Test command
+    usage: /test
