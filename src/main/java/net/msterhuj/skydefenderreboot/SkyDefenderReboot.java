@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import lombok.Getter;
-import net.msterhuj.skydefenderreboot.core.SkyDefenderRebootData;
+import net.msterhuj.skydefenderreboot.core.GameData;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -15,7 +15,7 @@ public final class SkyDefenderReboot extends JavaPlugin {
     private static SkyDefenderReboot instance;
 
     @Getter
-    private static SkyDefenderRebootData data;
+    private static GameData data;
 
     @Getter
     private static CommandManager commandManager;
@@ -38,7 +38,7 @@ public final class SkyDefenderReboot extends JavaPlugin {
     }
 
     public void initNew() {
-        data = new SkyDefenderRebootData();
+        data = new GameData();
         this.saveData();
     }
 
@@ -48,7 +48,7 @@ public final class SkyDefenderReboot extends JavaPlugin {
             try {
                 Gson gson = new Gson();
                 JsonReader reader = new JsonReader(new FileReader(instance.getDataFolder().getPath() + "/data.json"));
-                data = gson.fromJson(reader, SkyDefenderRebootData.class);
+                data = gson.fromJson(reader, GameData.class);
                 instance.getLogger().info("Data loaded!");
             } catch (FileNotFoundException e) {
                 instance.getLogger().info("Data not found! Creating new data file...");
