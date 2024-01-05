@@ -26,6 +26,14 @@ public class Commands implements CommandExecutor {
 
         Player player = (Player) commandSender;
 
+        // setspawn
+        if (strings[0].equalsIgnoreCase("setspawn")) {
+            SkyDefenderReboot.getData().setSpawnLocation(new SpawnLocation(player));
+            SkyDefenderReboot.getInstance().saveData();
+            player.sendMessage("§aSpawn set!");
+            return true;
+        }
+
         // settout
         if (strings[0].equalsIgnoreCase("settpout")) {
             if (strings.length == 1) {

@@ -10,6 +10,7 @@ import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterManager;
 public class GameData {
 
     private GameStatus gameStatus;
+    private SpawnLocation spawnLocation;
 
     private TeleporterManager teleporterManager;
     private TeamManager teamManager;
