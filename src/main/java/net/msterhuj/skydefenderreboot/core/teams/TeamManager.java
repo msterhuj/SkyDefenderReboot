@@ -2,6 +2,7 @@ package net.msterhuj.skydefenderreboot.core.teams;
 
 
 import lombok.Data;
+import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -46,23 +47,30 @@ public class TeamManager {
         }
     }
 
-    public Location getRandomHighestSafeLocation(World world, int minX, int maxX, int minZ, int maxZ) {
+    public Location getRandomHighestSafeLocation(Location startLocation, int spreadDistanceFromLocation) {
         Random random = new Random();
-        int x = random.nextInt(minX, maxX);
-        int z = random.nextInt(minZ, maxZ);
-        Location location = world.getHighestBlockAt(x, z).getLocation();
-        if (location.getBlock().isLiquid()) {
-            return getRandomHighestSafeLocation(world, minX, maxX, minZ, maxZ);
+        int x = startLocation.getBlockX() + random.nextInt(-spreadDistanceFromLocation, spreadDistanceFromLocation);
+        int z = startLocation.getBlockZ() + random.nextInt(-spreadDistanceFromLocation, spreadDistanceFromLocation);
+        Location destLocation = startLocation.getWorld().getHighestBlockAt(x, z).getLocation();
+        if (destLocation.getBlock().isLiquid()) {
+            return getRandomHighestSafeLocation(startLocation, spreadDistanceFromLocation);
         }
-        return location;
+        return destLocation.add(0.5, 1.2, 0.5);
     }
 
     public void spreadPlayers() {
-        //Player[] attackers = getPlayers(TeamType.ATTACKER);
-        //Player[] defenders = getPlayers(TeamType.DEFENDER);
-        //Player[] spectators = getPlayers(TeamType.SPECTATOR);
-
-
+        SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
+        int spreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn");
+        for (Player attacker : getPlayers(TeamType.ATTACKER)) {
+            attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getData().getSpawnLocation().getLocation(), spreadDistanceFromSpawn));
+        }
+        Location spawnLocation = SkyDefenderReboot.getData().getSpawnLocation().getLocation();
+        for (Player defender : getPlayers(TeamType.DEFENDER)) {
+            defender.teleport(spawnLocation);
+        }
+        for (Player spectator : getPlayers(TeamType.SPECTATOR)) {
+            spectator.teleport(spawnLocation);
+        }
     }
 
     private Player[] getPlayers(TeamType teamType) {
