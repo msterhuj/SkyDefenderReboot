@@ -1,6 +1,8 @@
 package net.msterhuj.skydefenderreboot.core.teleporter;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
+import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
+import net.msterhuj.skydefenderreboot.core.teams.TeamType;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +14,8 @@ public class TeleporterListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction().equals(Action.PHYSICAL)) {
             if (event.getClickedBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
+                TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
+                if (teamManager.getTeamPlayer(event.getPlayer()).getTeamType() != TeamType.DEFENDER) return;
                 SkyDefenderReboot.getData().getTeleporterManager().teleportPlayer(event.getPlayer(), event.getClickedBlock().getLocation());
             }
         }

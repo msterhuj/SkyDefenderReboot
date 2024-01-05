@@ -4,6 +4,7 @@ package net.msterhuj.skydefenderreboot.core.teams;
 import lombok.Data;
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -58,18 +59,28 @@ public class TeamManager {
         return destLocation.add(0.5, 1.2, 0.5);
     }
 
+    /*
+     * Teleport attackers to random locations around spawn
+     * Teleport defenders and spectator to spawn
+     */
     public void spreadPlayers() {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         int spreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn");
         for (Player attacker : getPlayers(TeamType.ATTACKER)) {
             attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getData().getSpawnLocation().getLocation(), spreadDistanceFromSpawn));
+            attacker.setGameMode(GameMode.SURVIVAL);
+            attacker.getInventory().clear();
         }
         Location spawnLocation = SkyDefenderReboot.getData().getSpawnLocation().getLocation();
         for (Player defender : getPlayers(TeamType.DEFENDER)) {
             defender.teleport(spawnLocation);
+            defender.setGameMode(GameMode.SURVIVAL);
+            defender.getInventory().clear();
         }
         for (Player spectator : getPlayers(TeamType.SPECTATOR)) {
             spectator.teleport(spawnLocation);
+            spectator.setGameMode(GameMode.SPECTATOR);
+            spectator.getInventory().clear();
         }
     }
 
@@ -82,5 +93,12 @@ public class TeamManager {
 
     public TeamPlayer getTeamPlayer(Player player) {
         return teamPlayers.stream().filter(teamPlayer -> teamPlayer.getUuid().equals(player.getUniqueId())).findFirst().orElse(null);
+    }
+
+    /*
+     * Check if there is at least 1 player in each defender and attacker team
+     */
+    public boolean isReady() {
+        return getPlayers(TeamType.ATTACKER).length < 1 && getPlayers(TeamType.DEFENDER).length < 1;
     }
 }

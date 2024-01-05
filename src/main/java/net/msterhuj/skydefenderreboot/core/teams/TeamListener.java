@@ -6,6 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class TeamListener implements Listener {
@@ -20,7 +21,10 @@ public class TeamListener implements Listener {
         switch (SkyDefenderReboot.getData().getGameStatus()) {
             case WAITING:
                 server.broadcastMessage("§aWaiting for players...");
-                if (!player.isOp()) player.setGameMode(GameMode.ADVENTURE);
+                if (!player.isOp()) {
+                    player.setGameMode(GameMode.ADVENTURE);
+                    player.teleport(SkyDefenderReboot.getData().getSpawnLocation().getLocation().add(0.5, 0.2, 0.5));
+                }
                 break;
 
             case STARTED:
@@ -39,5 +43,15 @@ public class TeamListener implements Listener {
                 player.setGameMode(GameMode.SPECTATOR);
                 break;
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
+        TeamPlayer teamPlayer = teamManager.getTeamPlayer(player);
+        if(teamPlayer.getTeamType() == TeamType.DEFENDER) return;
+        teamPlayer.setAlive(false);
+        player.setGameMode(GameMode.SPECTATOR);
     }
 }

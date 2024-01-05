@@ -1,5 +1,8 @@
 package net.msterhuj.skydefenderreboot;
 
+import net.msterhuj.skydefenderreboot.core.GameCommands;
+import net.msterhuj.skydefenderreboot.core.GameStatus;
+import net.msterhuj.skydefenderreboot.core.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamCommands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,6 +20,11 @@ public class Commands implements CommandExecutor {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         plugin.getLogger().info(Arrays.toString(strings));
 
+        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.STARTING) {
+            commandSender.sendMessage("§cYou can't do this now (game is starting)");
+            return true;
+        }
+
         //
         if (strings.length == 0) {
             commandSender.sendMessage("§cSkyDefenderReboot v" + plugin.getDescription().getVersion() + " by Msterhuj");
@@ -30,7 +38,8 @@ public class Commands implements CommandExecutor {
         if (strings[0].equalsIgnoreCase("setspawn")) {
             SkyDefenderReboot.getData().setSpawnLocation(new SpawnLocation(player));
             SkyDefenderReboot.getInstance().saveData();
-            player.sendMessage("§aSpawn set!");
+            player.getWorld().setSpawnLocation(player.getLocation());
+            player.sendMessage("§aWorldSpawn set!");
             return true;
         }
 
@@ -74,6 +83,9 @@ public class Commands implements CommandExecutor {
 
         if (strings[0].equalsIgnoreCase("team"))
             return (new TeamCommands()).run(commandSender, command, s, strings);
+
+        if (strings[0].equalsIgnoreCase("game"))
+            return (new GameCommands()).run(commandSender, command, s, strings);
 
         return false;
     }
