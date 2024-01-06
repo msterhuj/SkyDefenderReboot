@@ -1,6 +1,7 @@
 package net.msterhuj.skydefenderreboot.core;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
+import net.msterhuj.skydefenderreboot.core.locations.BannerLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
 import net.msterhuj.skydefenderreboot.core.teams.TeamPlayer;
 import net.msterhuj.skydefenderreboot.core.teams.TeamType;

@@ -2,8 +2,9 @@ package net.msterhuj.skydefenderreboot;
 
 import net.msterhuj.skydefenderreboot.core.GameCommands;
 import net.msterhuj.skydefenderreboot.core.GameStatus;
-import net.msterhuj.skydefenderreboot.core.SpawnLocation;
+import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamCommands;
+import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterCommands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,42 +53,8 @@ public class Commands implements CommandExecutor {
             return true;
         }
 
-        // settout
-        if (strings[0].equalsIgnoreCase("settpout")) {
-            if (strings.length == 1) {
-                player.sendMessage("§cUse §e/skydefenderreboot settpout <name> §cfor help");
-                return true;
-            }
-            // settpout <name>
-            SkyDefenderReboot.getData().getTeleporterManager().addTeleporter(player, strings[1], TeleporterType.OUTPUT);
-            SkyDefenderReboot.getInstance().saveData();
-            player.sendMessage("§aTeleporter set!");
-            return true;
-
-        }
-        // settpin
-        if (strings[0].equalsIgnoreCase("settpin")) {
-            // settpin <name>
-            if (strings.length == 1) {
-                player.sendMessage("§cUse §e/skydefenderreboot settpin <name> §cfor help");
-                return true;
-            }
-            SkyDefenderReboot.getData().getTeleporterManager().addTeleporter(player, strings[1], TeleporterType.INPUT);
-            SkyDefenderReboot.getInstance().saveData();
-            player.sendMessage("§aTeleporter set!");
-            return true;
-        }
-        // resettp
-        if (strings[0].equalsIgnoreCase("resettp")) {
-            // resettp <name>
-            if (strings.length == 2) {
-                SkyDefenderReboot.getData().getTeleporterManager().resetTeleporter(strings[1]);
-                SkyDefenderReboot.getInstance().saveData();
-                player.sendMessage("§aTeleporter reset!");
-            } else {
-                player.sendMessage("§cUse §e/skydefenderreboot resettp <name> §cfor help");
-            }
-            return true;
+        if (strings[0].equalsIgnoreCase("teleporter")) {
+            return (new TeleporterCommands()).run(commandSender, command, s, strings);
         }
 
         if (strings[0].equalsIgnoreCase("team"))

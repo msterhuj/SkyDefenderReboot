@@ -19,6 +19,11 @@ public class TestCommands implements CommandExecutor {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         plugin.getLogger().info("Test command executed");
 
+        Player player = (Player) commandSender;
+        World world = player.getWorld();
+        player.sendMessage("Time: " + world.getTime());
+        player.sendMessage("Full Time: " + world.getFullTime());
+        player.sendMessage("Game Time: " + world.getGameTime());
         return true;
     }
 }
