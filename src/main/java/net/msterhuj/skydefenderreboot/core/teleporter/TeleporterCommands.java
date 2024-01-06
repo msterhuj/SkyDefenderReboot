@@ -6,6 +6,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TeleporterCommands {
     public boolean run(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -24,7 +30,7 @@ public class TeleporterCommands {
         }
 
         // reset
-        if (strings[1].equalsIgnoreCase("resettp")) {
+        if (strings[1].equalsIgnoreCase("reset")) {
             // resettp <name>
             if (strings.length == 3) {
                 SkyDefenderReboot.getData().getTeleporterManager().resetTeleporter(strings[2]);
@@ -62,5 +68,32 @@ public class TeleporterCommands {
             return true;
         }
         return false;
+    }
+
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+        List<String> list = new ArrayList<>();
+
+        if (strings.length == 2) {
+            list.add("reset");
+            list.add("setin");
+            list.add("setout");
+            return list.stream().filter(stream -> stream.startsWith(strings[1])).collect(Collectors.toList());
+        }
+
+        if (strings.length == 3) {
+            if (strings[1].equalsIgnoreCase("reset")) {
+                list.addAll(SkyDefenderReboot.getData().getTeleporterManager().getTeleporters().keySet());
+                return list.stream().filter(stream -> stream.startsWith(strings[2])).collect(Collectors.toList());
+            }
+
+            if (strings[1].equalsIgnoreCase("setin") || strings[1].equalsIgnoreCase("setout")) {
+                list.addAll(SkyDefenderReboot.getData().getTeleporterManager().getTeleporters().keySet());
+                List<String> filtered = list.stream()
+                        .filter(stream -> stream.startsWith(strings[2])).collect(Collectors.toList());
+                filtered.add("<name>");
+                return filtered;
+            }
+        }
+        return list;
     }
 }
