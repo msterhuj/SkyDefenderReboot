@@ -6,12 +6,10 @@ import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+
 
 @Data
 public class TeamManager {
@@ -66,27 +64,34 @@ public class TeamManager {
     public void spreadPlayers() {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         int spreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn");
-        for (Player attacker : getPlayers(TeamType.ATTACKER)) {
+        for (Player attacker : getOnlineTeamPlayers(TeamType.ATTACKER)) {
             attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getData().getSpawnLocation().getLocation(), spreadDistanceFromSpawn));
             attacker.setGameMode(GameMode.SURVIVAL);
             attacker.getInventory().clear();
         }
         Location spawnLocation = SkyDefenderReboot.getData().getSpawnLocation().getLocation();
-        for (Player defender : getPlayers(TeamType.DEFENDER)) {
+        for (Player defender : getOnlineTeamPlayers(TeamType.DEFENDER)) {
             defender.teleport(spawnLocation);
             defender.setGameMode(GameMode.SURVIVAL);
             defender.getInventory().clear();
         }
-        for (Player spectator : getPlayers(TeamType.SPECTATOR)) {
+        for (Player spectator : getOnlineTeamPlayers(TeamType.SPECTATOR)) {
             spectator.teleport(spawnLocation);
             spectator.setGameMode(GameMode.SPECTATOR);
             spectator.getInventory().clear();
         }
     }
 
-    private Player[] getPlayers(TeamType teamType) {
+    private Player[] getTeamPlayers(TeamType teamType) {
         return teamPlayers.stream()
                 .filter(teamPlayer -> teamPlayer.getTeamType().equals(teamType))
+                .map(TeamPlayer::getPlayerByUUID)
+                .toArray(Player[]::new);
+    }
+
+    private Player[] getOnlineTeamPlayers(TeamType teamType) {
+        return teamPlayers.stream()
+                .filter(teamPlayer -> teamPlayer.getTeamType().equals(teamType) && teamPlayer.isOnline())
                 .map(TeamPlayer::getPlayerByUUID)
                 .toArray(Player[]::new);
     }
@@ -96,9 +101,17 @@ public class TeamManager {
     }
 
     /*
-     * Check if there is at least 1 player in each defender and attacker team
+     * Check if there is at least 1 player in each defender and attacker team online
      */
     public boolean isReady() {
-        return getPlayers(TeamType.ATTACKER).length < 1 && getPlayers(TeamType.DEFENDER).length < 1;
+        Bukkit.broadcastMessage("defender online" + getOnlineTeamPlayers(TeamType.DEFENDER).length);
+        for (Player defender : getOnlineTeamPlayers(TeamType.DEFENDER)) {
+            Bukkit.broadcastMessage(defender.getName());
+        }
+        Bukkit.broadcastMessage("attacker online" + getOnlineTeamPlayers(TeamType.ATTACKER).length);
+        for (Player attacker : getOnlineTeamPlayers(TeamType.ATTACKER)) {
+            Bukkit.broadcastMessage(attacker.getName());
+        }
+        return getOnlineTeamPlayers(TeamType.ATTACKER).length >= 1 && getOnlineTeamPlayers(TeamType.DEFENDER).length >= 1;
     }
 }

@@ -34,11 +34,12 @@ public class GameCommands {
 
             // check if there is at least 2 players in each team
             TeamManager teamManager = gameData.getTeamManager();
-            if (teamManager.isReady()) {
-                commandSender.sendMessage("§cYou need at least 2 players in attacker and defender teams to start the game");
+            if (!teamManager.isReady()) {
+                commandSender.sendMessage("§cYou need at least 1 players in attacker and defender teams online to start the game");
                 gameData.setGameStatus(GameStatus.WAITING);
                 return true;
             }
+
             teamManager.spreadPlayers();
 
 

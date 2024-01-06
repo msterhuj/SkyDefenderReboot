@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterType;
 
@@ -40,6 +41,14 @@ public class Commands implements CommandExecutor {
             SkyDefenderReboot.getInstance().saveData();
             player.getWorld().setSpawnLocation(player.getLocation());
             player.sendMessage("§aWorldSpawn set!");
+            return true;
+        }
+
+        // serbanner
+        if (strings[0].equalsIgnoreCase("setbanner")) {
+            Player p = (Player) commandSender;
+            player.setMetadata("setup_banner", new FixedMetadataValue(plugin, true));
+            player.sendMessage("§aRight click on the banner");
             return true;
         }
 

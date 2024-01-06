@@ -21,4 +21,8 @@ public class TeamPlayer {
     public Player getPlayerByUUID() {
         return Bukkit.getPlayer(uuid);
     }
+
+    public boolean isOnline() {
+        return getPlayerByUUID() != null;
+    }
 }
