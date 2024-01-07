@@ -74,6 +74,8 @@ public class Commands implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         List<String> list = new ArrayList<>();
 
+        commandSender.sendMessage(Arrays.toString(strings));
+
         if (strings.length == 1) {
             list.add("setspawn");
             list.add("setbanner");
@@ -86,6 +88,12 @@ public class Commands implements CommandExecutor, TabCompleter {
         if (strings.length >= 2) {
             if (strings[0].equalsIgnoreCase("teleporter")) {
                 return (new TeleporterCommands()).onTabComplete(commandSender, command, s, strings);
+            }
+            if (strings[0].equalsIgnoreCase("team")) {
+                return (new TeamCommands()).onTabComplete(commandSender, command, s, strings);
+            }
+            if (strings[0].equalsIgnoreCase("game")) {
+                return (new GameCommands()).onTabComplete(commandSender, command, s, strings);
             }
         }
 

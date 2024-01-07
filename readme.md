@@ -1,7 +1,8 @@
 # SkyDefenderReboot
 
 A very basic skydefender plugin still in development.
-this is a beta version, so it contain a lots of bugs.
+This is a beta version, so it contain a lots of bugs.
+But the plugin is playable if its commited on master branch.
 Developed for 1.20.4 minecraft version (maybe work on other version idk)
 
 ## Commands
@@ -10,19 +11,22 @@ Developed for 1.20.4 minecraft version (maybe work on other version idk)
                   list
                   join <team>
                   leave
-/skydefender settpin <name>
-/skydefender settpout <name>
-/skydefender resettp
+/skydefender teleporter 
+                        setin <name>
+                        setout <name>
+                        reset <name>
 /skydefender setspawn
 /skydefender setbanner
-/skydefender game start
+/skydefender game
+                  start
+                  reset
 ```
 
 > Other commands will be added soon
 
 ## Permissions
 
-No prems for the moment every one can use the commands
+All commands can be used by all players except the /skydefender game * commands
 
 ## Config
 
@@ -34,11 +38,15 @@ spread_distance_from_spawn: 1000
 ## TODO
 
 - [ ] Add a timer system
-- [ ] Rework commands and add auto-completion
-- [ ] Setup permissions
+- [x] Rework commands and add auto-completion
+- [ ] Add a more commands and admin commands
+- [ ] Add add pause system
+- [ ] Add a reload command
+- [ ] Setup better permissions
 - [ ] Add timer for nether portal
 - [ ] Add a team system for multiple attacker team and one defender team
 - [ ] Add world border 
+- [ ] Add a sky protection and remove after x days
 
 ## build
 
