@@ -15,5 +15,5 @@ commands:
       - sk
       - sky
   test:
-    description: Test command
+    description: Test command used for debug
     usage: /test

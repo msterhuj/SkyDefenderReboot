@@ -2,19 +2,24 @@ package net.msterhuj.skydefenderreboot;
 
 import net.msterhuj.skydefenderreboot.core.GameCommands;
 import net.msterhuj.skydefenderreboot.core.GameStatus;
-import net.msterhuj.skydefenderreboot.core.SpawnLocation;
+import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamCommands;
+import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterCommands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
-import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterType;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class Commands implements CommandExecutor {
+public class Commands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
@@ -52,42 +57,8 @@ public class Commands implements CommandExecutor {
             return true;
         }
 
-        // settout
-        if (strings[0].equalsIgnoreCase("settpout")) {
-            if (strings.length == 1) {
-                player.sendMessage("§cUse §e/skydefenderreboot settpout <name> §cfor help");
-                return true;
-            }
-            // settpout <name>
-            SkyDefenderReboot.getData().getTeleporterManager().addTeleporter(player, strings[1], TeleporterType.OUTPUT);
-            SkyDefenderReboot.getInstance().saveData();
-            player.sendMessage("§aTeleporter set!");
-            return true;
-
-        }
-        // settpin
-        if (strings[0].equalsIgnoreCase("settpin")) {
-            // settpin <name>
-            if (strings.length == 1) {
-                player.sendMessage("§cUse §e/skydefenderreboot settpin <name> §cfor help");
-                return true;
-            }
-            SkyDefenderReboot.getData().getTeleporterManager().addTeleporter(player, strings[1], TeleporterType.INPUT);
-            SkyDefenderReboot.getInstance().saveData();
-            player.sendMessage("§aTeleporter set!");
-            return true;
-        }
-        // resettp
-        if (strings[0].equalsIgnoreCase("resettp")) {
-            // resettp <name>
-            if (strings.length == 2) {
-                SkyDefenderReboot.getData().getTeleporterManager().resetTeleporter(strings[1]);
-                SkyDefenderReboot.getInstance().saveData();
-                player.sendMessage("§aTeleporter reset!");
-            } else {
-                player.sendMessage("§cUse §e/skydefenderreboot resettp <name> §cfor help");
-            }
-            return true;
+        if (strings[0].equalsIgnoreCase("teleporter")) {
+            return (new TeleporterCommands()).run(commandSender, command, s, strings);
         }
 
         if (strings[0].equalsIgnoreCase("team"))
@@ -97,5 +68,35 @@ public class Commands implements CommandExecutor {
             return (new GameCommands()).run(commandSender, command, s, strings);
 
         return false;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+        List<String> list = new ArrayList<>();
+
+        commandSender.sendMessage(Arrays.toString(strings));
+
+        if (strings.length == 1) {
+            list.add("setspawn");
+            list.add("setbanner");
+            list.add("teleporter");
+            list.add("team");
+            list.add("game");
+            return list.stream().filter(stream -> stream.startsWith(strings[0])).collect(Collectors.toList());
+        }
+
+        if (strings.length >= 2) {
+            if (strings[0].equalsIgnoreCase("teleporter")) {
+                return (new TeleporterCommands()).onTabComplete(commandSender, command, s, strings);
+            }
+            if (strings[0].equalsIgnoreCase("team")) {
+                return (new TeamCommands()).onTabComplete(commandSender, command, s, strings);
+            }
+            if (strings[0].equalsIgnoreCase("game")) {
+                return (new GameCommands()).onTabComplete(commandSender, command, s, strings);
+            }
+        }
+
+        return list;
     }
 }

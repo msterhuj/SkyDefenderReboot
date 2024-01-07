@@ -1,6 +1,8 @@
 package net.msterhuj.skydefenderreboot.core;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
+import net.msterhuj.skydefenderreboot.core.locations.BannerLocation;
+import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
 import net.msterhuj.skydefenderreboot.core.teams.TeamPlayer;
 import org.bukkit.Bukkit;
@@ -32,18 +34,6 @@ public class GameData {
         if (this.gameStatus == gameStatus) return;
         this.gameStatus = gameStatus;
         switch (gameStatus) {
-            case WAITING:
-                SkyDefenderReboot.getInstance().getServer().broadcastMessage("§aWaiting for players...");
-                break;
-
-            case STARTED:
-                Bukkit.broadcastMessage("§aGame started!");
-                break;
-
-            case PAUSED:
-                Bukkit.broadcastMessage("§aGame paused!");
-                break;
-
             case FINISH:
                 Bukkit.broadcastMessage("§aGame finished!");
                 for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {
@@ -52,9 +42,4 @@ public class GameData {
                 break;
         }
     }
-
-    /*
-     * when a block is broken, check if it's the banner
-     * when player dies, check if he's the last one in the attacker team
-     */
 }

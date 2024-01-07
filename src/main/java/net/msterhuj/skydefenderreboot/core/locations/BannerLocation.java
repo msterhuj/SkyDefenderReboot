@@ -1,4 +1,4 @@
-package net.msterhuj.skydefenderreboot.core;
+package net.msterhuj.skydefenderreboot.core.locations;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

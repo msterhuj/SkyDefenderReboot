@@ -1,9 +1,12 @@
 package net.msterhuj.skydefenderreboot.core.teleporter;
 
+import lombok.Data;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import java.util.HashMap;
+import java.util.Map;
 
+@Data
 public class TeleporterManager {
 
 

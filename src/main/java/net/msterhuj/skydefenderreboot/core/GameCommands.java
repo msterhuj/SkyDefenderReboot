@@ -5,6 +5,11 @@ import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameCommands {
     public boolean run(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -48,6 +53,28 @@ public class GameCommands {
             return true;
         }
 
+        // reset
+        if (strings[1].equalsIgnoreCase("reset")) {
+            TeamManager teamManager = gameData.getTeamManager();
+            teamManager.resetTeams();
+            gameData.setGameStatus(GameStatus.WAITING);
+            plugin.saveData();
+            commandSender.sendMessage("§aGame reset");
+            return true;
+        }
+
         return false;
+    }
+
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+        List<String> list = new ArrayList<>();
+
+        if (strings.length == 2) {
+            list.add("start");
+            list.add("reset");
+            return list.stream().filter(stream -> stream.startsWith(strings[1])).collect(Collectors.toList());
+        }
+
+        return list;
     }
 }

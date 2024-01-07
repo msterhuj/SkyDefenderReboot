@@ -6,6 +6,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TeamCommands {
     public boolean run(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -86,5 +92,28 @@ public class TeamCommands {
         }
 
         return false;
+    }
+
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+        List<String> list = new ArrayList<>();
+
+        if (strings.length == 2) {
+            list.add("list");
+            list.add("join");
+            list.add("leave");
+            return list.stream().filter(stream -> stream.startsWith(strings[1])).collect(java.util.stream.Collectors.toList());
+        }
+
+        if (strings.length == 3) {
+
+            if (strings[1].equalsIgnoreCase("join")) {
+                list = Arrays.asList(TeamType.values())
+                        .stream()
+                        .map(TeamType::getName)
+                        .collect(Collectors.toList());
+                return list.stream().filter(stream -> stream.startsWith(strings[2])).collect(java.util.stream.Collectors.toList());
+            }
+        }
+        return list;
     }
 }
