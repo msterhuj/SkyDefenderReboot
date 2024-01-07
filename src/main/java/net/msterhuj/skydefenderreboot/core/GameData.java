@@ -42,9 +42,4 @@ public class GameData {
                 break;
         }
     }
-
-    /*
-     * when a block is broken, check if it's the banner
-     * when player dies, check if he's the last one in the attacker team
-     */
 }
