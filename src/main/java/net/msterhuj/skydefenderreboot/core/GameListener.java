@@ -37,7 +37,13 @@ public class GameListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         // check if it's the banner
         Location bannerLocation = SkyDefenderReboot.getData().getBannerLocation().getLocation();
+        TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
         if (event.getBlock().getLocation().equals(bannerLocation)) {
+            if (teamManager.getTeamPlayer(event.getPlayer()).isTeam(TeamType.DEFENDER)) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage("§cYou can't break the banner!");
+                return;
+            }
             // attacker team wins
             Bukkit.broadcastMessage("§aAttacker team wins!");
             SkyDefenderReboot.getData().setGameStatus(GameStatus.FINISH);

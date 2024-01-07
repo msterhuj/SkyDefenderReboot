@@ -114,4 +114,8 @@ public class TeamManager {
         }
         return getOnlineTeamPlayers(TeamType.ATTACKER).length >= 1 && getOnlineTeamPlayers(TeamType.DEFENDER).length >= 1;
     }
+
+    public void resetTeams() {
+        teamPlayers.forEach(teamPlayer -> teamPlayer.setTeamType(TeamType.SPECTATOR));
+    }
 }

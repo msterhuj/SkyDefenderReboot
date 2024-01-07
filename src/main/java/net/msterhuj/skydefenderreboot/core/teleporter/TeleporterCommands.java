@@ -56,7 +56,7 @@ public class TeleporterCommands {
         }
 
         // setout
-        if (strings[0].equalsIgnoreCase("setout")) {
+        if (strings[1].equalsIgnoreCase("setout")) {
             if (strings.length == 2) {
                 player.sendMessage("§cUse §e/skydefenderreboot  §cfor help");
                 return true;

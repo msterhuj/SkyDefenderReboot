@@ -25,4 +25,8 @@ public class TeamPlayer {
     public boolean isOnline() {
         return getPlayerByUUID() != null;
     }
+
+    public boolean isTeam(TeamType teamType) {
+        return this.teamType == teamType;
+    }
 }

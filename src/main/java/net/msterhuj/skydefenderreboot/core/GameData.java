@@ -34,18 +34,6 @@ public class GameData {
         if (this.gameStatus == gameStatus) return;
         this.gameStatus = gameStatus;
         switch (gameStatus) {
-            case WAITING:
-                SkyDefenderReboot.getInstance().getServer().broadcastMessage("§aWaiting for players...");
-                break;
-
-            case STARTED:
-                Bukkit.broadcastMessage("§aGame started!");
-                break;
-
-            case PAUSED:
-                Bukkit.broadcastMessage("§aGame paused!");
-                break;
-
             case FINISH:
                 Bukkit.broadcastMessage("§aGame finished!");
                 for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {

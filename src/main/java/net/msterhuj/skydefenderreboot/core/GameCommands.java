@@ -48,6 +48,16 @@ public class GameCommands {
             return true;
         }
 
+        // reset
+        if (strings[1].equalsIgnoreCase("reset")) {
+            TeamManager teamManager = gameData.getTeamManager();
+            teamManager.resetTeams();
+            gameData.setGameStatus(GameStatus.WAITING);
+            plugin.saveData();
+            commandSender.sendMessage("§aGame reset");
+            return true;
+        }
+
         return false;
     }
 }
