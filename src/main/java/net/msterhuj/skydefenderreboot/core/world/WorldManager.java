@@ -16,6 +16,11 @@ public class WorldManager {
         return (int) (world.getFullTime() / 24000);
     }
 
+    public static void setDay(long day) {
+        World world = getWorld();
+        world.setFullTime(day * 24000);
+    }
+
     private static long getNextTime(WorldTime worldTime) {
         // Helper method to get the next time for the given WorldTime
         WorldTime[] values = WorldTime.values();
