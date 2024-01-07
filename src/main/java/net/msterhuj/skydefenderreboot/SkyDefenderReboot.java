@@ -32,8 +32,8 @@ public final class SkyDefenderReboot extends JavaPlugin {
         commandManager = new CommandManager(this);
         listenerManager = new ListenerManager(this);
 
-        //GameTask gameTask = new GameTask();
-        //gameTask.runTaskTimer(this, 0, 20L);
+        GameTask gameTask = new GameTask();
+        gameTask.runTaskTimer(this, 0, 20L);
     }
 
     @Override
