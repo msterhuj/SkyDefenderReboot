@@ -5,10 +5,12 @@ import net.msterhuj.skydefenderreboot.core.locations.BannerLocation;
 import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
 import net.msterhuj.skydefenderreboot.core.teams.TeamPlayer;
+import net.msterhuj.skydefenderreboot.core.world.WorldManager;
 import org.bukkit.Bukkit;
 import lombok.Data;
 import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterManager;
 import org.bukkit.GameMode;
+import org.bukkit.GameRule;
 
 @Data
 public class GameData {
@@ -34,11 +36,14 @@ public class GameData {
         if (this.gameStatus == gameStatus) return;
         this.gameStatus = gameStatus;
         switch (gameStatus) {
+            case STARTING:
+                WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
             case FINISH:
                 Bukkit.broadcastMessage("§aGame finished!");
                 for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {
                     teamPlayer.getPlayerByUUID().setGameMode(GameMode.CREATIVE);
                 }
+                WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
                 break;
         }
     }
