@@ -38,8 +38,9 @@ public class GameData {
         switch (gameStatus) {
             case STARTING:
                 WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+                break;
             case FINISH:
-                Bukkit.broadcastMessage("§aGame finished!");
+                Bukkit.broadcastMessage("§aGame finished!"); // todo do it only with online players
                 for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {
                     teamPlayer.getPlayerByUUID().setGameMode(GameMode.CREATIVE);
                 }
