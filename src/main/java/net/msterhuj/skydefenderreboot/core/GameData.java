@@ -40,8 +40,9 @@ public class GameData {
                 WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
                 break;
             case FINISH:
-                Bukkit.broadcastMessage("§aGame finished!"); // todo do it only with online players
+                Bukkit.broadcastMessage("§aGame finished!");
                 for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {
+                    if (!teamPlayer.isOnline()) continue;
                     teamPlayer.getPlayerByUUID().setGameMode(GameMode.CREATIVE);
                 }
                 WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
