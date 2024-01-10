@@ -45,10 +45,11 @@ public class GameCommands {
                 return true;
             }
 
+            // todo add multi thread for teleporting players and add countdown
             teamManager.spreadPlayers();
 
 
-            gameData.setGameStatus(GameStatus.STARTED);
+            gameData.setGameStatus(GameStatus.RUNNING);
             plugin.saveData();
             return true;
         }

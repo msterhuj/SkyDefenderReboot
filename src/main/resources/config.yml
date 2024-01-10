@@ -1,2 +1,12 @@
-spread_distance_from_spawn: 1000
-allow_nether_day: 2
+spread_distance_from_spawn:
+  min: 1000 # min distance from spawn
+  max: 5000 # max distance from spawn
+
+allow_nether_at_day: 2
+
+worldborder:
+  start_reduce_at_day: 5 # when to start reducing the worldborder
+  finish_reduce_at_day: 10 # when to stop reducing the worldborder and set it to min_size
+  start_radius: 1000 # from spawn this value need to be min 2x bigger than max spread_distance_from_spawn
+  finish_radius: 250 # from spawn
+  movement_time: 1 # how many seconds to reduce the worldborder to the next size (speed)

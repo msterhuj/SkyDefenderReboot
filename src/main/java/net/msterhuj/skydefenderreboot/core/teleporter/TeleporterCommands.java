@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class TeleporterCommands {
         Player player = (Player) commandSender;
 
         // disable command if game is started
-        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.STARTED) {
+        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.RUNNING) {
             commandSender.sendMessage("§cYou can't do this now");
             return true;
         }

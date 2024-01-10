@@ -20,7 +20,7 @@ public class GameListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
         TeamPlayer teamPlayer = teamManager.getTeamPlayer(event.getEntity());
-        if (SkyDefenderReboot.getData().isGameStatus(GameStatus.STARTED)) {
+        if (SkyDefenderReboot.getData().isGameStatus(GameStatus.RUNNING)) {
             if (teamPlayer.getTeamType() == TeamType.ATTACKER) {
                 // check if he's the last one in the attacker team
                 if (teamManager.getTeamPlayers().stream().filter(teamPlayer1 -> teamPlayer1.getTeamType() == TeamType.ATTACKER).count() == 1) {

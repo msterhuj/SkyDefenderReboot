@@ -37,7 +37,7 @@ spread_distance_from_spawn: 1000
 
 ## TODO
 
-- [ ] Add a timer system
+- [x] Add a timer system
 - [x] Rework commands and add auto-completion
 - [ ] Add a more commands and admin commands
 - [ ] Add add pause system
@@ -47,6 +47,7 @@ spread_distance_from_spawn: 1000
 - [ ] Add a team system for multiple attacker team and one defender team
 - [ ] Add world border 
 - [ ] Add a sky protection and remove after x days
+- [ ] Add a friendly fire system
 
 ## build
 

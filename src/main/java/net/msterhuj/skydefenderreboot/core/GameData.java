@@ -1,14 +1,15 @@
 package net.msterhuj.skydefenderreboot.core;
 
-import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.locations.BannerLocation;
 import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
 import net.msterhuj.skydefenderreboot.core.teams.TeamPlayer;
+import net.msterhuj.skydefenderreboot.core.world.WorldManager;
 import org.bukkit.Bukkit;
 import lombok.Data;
 import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterManager;
 import org.bukkit.GameMode;
+import org.bukkit.GameRule;
 
 @Data
 public class GameData {
@@ -34,11 +35,17 @@ public class GameData {
         if (this.gameStatus == gameStatus) return;
         this.gameStatus = gameStatus;
         switch (gameStatus) {
+            case RUNNING:
+                WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+                WorldManager.setDay(0);
+                break;
             case FINISH:
                 Bukkit.broadcastMessage("§aGame finished!");
                 for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {
+                    if (!teamPlayer.isOnline()) continue;
                     teamPlayer.getPlayerByUUID().setGameMode(GameMode.CREATIVE);
                 }
+                WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
                 break;
         }
     }
