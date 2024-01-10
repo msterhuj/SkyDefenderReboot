@@ -2,8 +2,6 @@ package net.msterhuj.skydefenderreboot.core;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
-import net.msterhuj.skydefenderreboot.core.world.WorldManager;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -48,10 +46,9 @@ public class GameCommands {
             }
 
             teamManager.spreadPlayers();
-            WorldManager.setDay(0);
 
 
-            gameData.setGameStatus(GameStatus.STARTED);
+            gameData.setGameStatus(GameStatus.RUNNING);
             plugin.saveData();
             return true;
         }

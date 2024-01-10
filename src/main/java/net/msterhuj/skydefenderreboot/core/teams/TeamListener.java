@@ -27,7 +27,7 @@ public class TeamListener implements Listener {
                 }
                 break;
 
-            case STARTED:
+            case RUNNING:
                 server.broadcastMessage("§aGame started!");
                 TeamPlayer teamPlayer = teamManager.getTeamPlayer(player);
                 if (teamPlayer.getTeamType() == TeamType.SPECTATOR) player.setGameMode(GameMode.SPECTATOR);

@@ -16,7 +16,7 @@ public class GameTask extends BukkitRunnable {
         SkyDefenderReboot instance = SkyDefenderReboot.getInstance();
         GameData data = SkyDefenderReboot.getData();
         // check if game is started
-        //if (!data.isGameStatus(GameStatus.STARTED)) return;
+        if (!data.isGameStatus(GameStatus.RUNNING)) return;
 
         if (this.currentDay != WorldManager.getDay()) {
             this.currentDay = WorldManager.getDay();

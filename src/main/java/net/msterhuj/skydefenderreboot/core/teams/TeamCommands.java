@@ -19,7 +19,7 @@ public class TeamCommands {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
 
         // disable command if game is started
-        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.STARTED) {
+        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.RUNNING) {
             commandSender.sendMessage("§cYou can't do this now");
             return true;
         }

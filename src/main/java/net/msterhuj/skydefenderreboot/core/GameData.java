@@ -1,6 +1,5 @@
 package net.msterhuj.skydefenderreboot.core;
 
-import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.locations.BannerLocation;
 import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
@@ -36,8 +35,9 @@ public class GameData {
         if (this.gameStatus == gameStatus) return;
         this.gameStatus = gameStatus;
         switch (gameStatus) {
-            case STARTING:
+            case RUNNING:
                 WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+                WorldManager.setDay(0);
                 break;
             case FINISH:
                 Bukkit.broadcastMessage("§aGame finished!");
