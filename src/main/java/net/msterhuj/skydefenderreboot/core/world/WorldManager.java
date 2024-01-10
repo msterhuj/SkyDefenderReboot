@@ -1,8 +1,12 @@
 package net.msterhuj.skydefenderreboot.core.world;
 
+import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.utils.ServerPropertiesParser;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class WorldManager {
 
@@ -47,5 +51,27 @@ public class WorldManager {
 
         // Check if we are within the threshold ticks before transitioning to the next time set
         return currentTime >= nextTimeSet - thresholdTicks && currentTime < nextTimeSet;
+    }
+
+    public static void setupBorderCenter(Location location) {
+        WorldBorder worldBorder = getWorld().getWorldBorder();
+        worldBorder.setCenter(location);
+        worldBorder.setSize(SkyDefenderReboot.getInstance().getConfig().getInt("worldborder.radius"));
+    }
+
+    public static void setDayBorder(int currentDay) {
+        FileConfiguration fileConfiguration = SkyDefenderReboot.getInstance().getConfig();
+        int startReduceAtDay = fileConfiguration.getInt("worldborder.start_reduce_at_day");
+        int finishReduceAtDay = fileConfiguration.getInt("worldborder.finish_reduce_at_day");
+        int startRadius = fileConfiguration.getInt("worldborder.start_radius");
+        int finishRadius = fileConfiguration.getInt("worldborder.finish_radius");
+
+        if (currentDay >= startReduceAtDay) {
+            double blocksPerDay = (double) (startRadius - finishRadius) / (finishReduceAtDay - startReduceAtDay);
+            double blocksToReduce = blocksPerDay * (currentDay - startReduceAtDay);
+            double newRadius = startRadius - blocksToReduce;
+            getWorld().getWorldBorder()
+                    .setSize(newRadius, fileConfiguration.getInt("worldborder.movement_time") * 20L);
+        }
     }
 }
