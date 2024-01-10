@@ -46,14 +46,20 @@ public class TeamManager {
         }
     }
 
-    public Location getRandomHighestSafeLocation(Location startLocation, int spreadDistanceFromLocation) {
+
+    public Location getRandomHighestSafeLocation(Location startLocation, int minSpreadDistanceFromLocation, int maxSpreadDistanceFromLocation) {
         Random random = new Random();
-        int x = startLocation.getBlockX() + random.nextInt(-spreadDistanceFromLocation, spreadDistanceFromLocation);
-        int z = startLocation.getBlockZ() + random.nextInt(-spreadDistanceFromLocation, spreadDistanceFromLocation);
-        Location destLocation = startLocation.getWorld().getHighestBlockAt(x, z).getLocation();
-        if (destLocation.getBlock().isLiquid()) {
-            return getRandomHighestSafeLocation(startLocation, spreadDistanceFromLocation);
-        }
+
+        int newX, newZ;
+        Location destLocation;
+
+        do {
+            newX = startLocation.getBlockX() + random.nextInt(-maxSpreadDistanceFromLocation, maxSpreadDistanceFromLocation);
+            newZ = startLocation.getBlockZ() + random.nextInt(-maxSpreadDistanceFromLocation, maxSpreadDistanceFromLocation);
+
+            destLocation = startLocation.getWorld().getHighestBlockAt(newX, newZ).getLocation();
+        } while (destLocation.getBlock().isLiquid() || destLocation.distance(startLocation) < minSpreadDistanceFromLocation);
+
         return destLocation.add(0.5, 1.2, 0.5);
     }
 
@@ -63,9 +69,11 @@ public class TeamManager {
      */
     public void spreadPlayers() {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
-        int spreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn");
+        int minSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.min");
+        int maxSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.max");
         for (Player attacker : getOnlineTeamPlayers(TeamType.ATTACKER)) {
-            attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getData().getSpawnLocation().getLocation(), spreadDistanceFromSpawn));
+            attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getData().getSpawnLocation().getLocation(),
+                    minSpreadDistanceFromSpawn, maxSpreadDistanceFromSpawn));
             attacker.setGameMode(GameMode.SURVIVAL);
             attacker.getInventory().clear();
         }

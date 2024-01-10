@@ -45,6 +45,7 @@ public class GameCommands {
                 return true;
             }
 
+            // todo add multi thread for teleporting players and add countdown
             teamManager.spreadPlayers();
 
 

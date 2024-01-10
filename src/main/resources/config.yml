@@ -1,4 +1,6 @@
-spread_distance_from_spawn: 1000
+spread_distance_from_spawn:
+  min: 150 # min distance from spawn
+  max: 1000 # max distance from spawn
 
 allow_nether_at_day: 2
 
