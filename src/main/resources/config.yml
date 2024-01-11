@@ -9,4 +9,4 @@ worldborder:
   finish_reduce_at_day: 10 # when to stop reducing the worldborder and set it to min_size
   start_radius: 1000 # from spawn this value need to be min 2x bigger than max spread_distance_from_spawn
   finish_radius: 250 # from spawn
-  movement_time: 1 # how many seconds to reduce the worldborder to the next size (speed)
+  movement_time: 300 # how many seconds to reduce the worldborder to the next size (speed)
