@@ -5,6 +5,7 @@ import net.msterhuj.skydefenderreboot.core.GameStatus;
 import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamCommands;
 import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterCommands;
+import net.msterhuj.skydefenderreboot.core.world.WorldManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,6 +46,7 @@ public class Commands implements CommandExecutor, TabCompleter {
             SkyDefenderReboot.getData().setSpawnLocation(new SpawnLocation(player));
             SkyDefenderReboot.getInstance().saveData();
             player.getWorld().setSpawnLocation(player.getLocation());
+            WorldManager.setupBorderCenter(player.getLocation());
             player.sendMessage("§aWorldSpawn set!");
             return true;
         }

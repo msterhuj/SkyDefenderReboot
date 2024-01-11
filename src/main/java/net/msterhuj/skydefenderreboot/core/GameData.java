@@ -1,5 +1,6 @@
 package net.msterhuj.skydefenderreboot.core;
 
+import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.locations.BannerLocation;
 import net.msterhuj.skydefenderreboot.core.locations.SpawnLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
@@ -25,6 +26,10 @@ public class GameData {
         this.gameStatus = GameStatus.WAITING;
         this.teleporterManager = new TeleporterManager();
         this.teamManager = new TeamManager();
+    }
+
+    public static GameData getData() {
+        return SkyDefenderReboot.getData();
     }
 
     public boolean isGameStatus(GameStatus gameStatus) {
