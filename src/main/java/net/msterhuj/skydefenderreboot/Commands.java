@@ -26,7 +26,6 @@ public class Commands implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
-        plugin.getLogger().info(Arrays.toString(strings));
 
         if (SkyDefenderReboot.getGameManager().getGameStatus() == GameStatus.STARTING) {
             commandSender.sendMessage("§cYou can't do this now (game is starting)");
@@ -75,8 +74,6 @@ public class Commands implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         List<String> list = new ArrayList<>();
-
-        commandSender.sendMessage(Arrays.toString(strings));
 
         if (strings.length == 1) {
             list.add("setspawn");

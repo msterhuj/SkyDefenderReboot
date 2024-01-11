@@ -3,6 +3,8 @@ package net.msterhuj.skydefenderreboot.core.teams;
 
 import lombok.Data;
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
+import net.msterhuj.skydefenderreboot.core.GameManager;
+import net.msterhuj.skydefenderreboot.core.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -60,6 +62,7 @@ public class TeamManager {
             destLocation = startLocation.getWorld().getHighestBlockAt(newX, newZ).getLocation();
         } while (destLocation.getBlock().isLiquid() || destLocation.distance(startLocation) < minSpreadDistanceFromLocation);
 
+
         // todo load chunk in other thread to avoid lag
 
         return destLocation.add(0.5, 1.2, 0.5);
@@ -70,6 +73,7 @@ public class TeamManager {
      * Teleport defenders and spectator to spawn
      */
     public void spreadPlayers() {
+        // todo add check if worldborder if to small compared to teleporter radius and warn in console
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         int minSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.min");
         int maxSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.max");
@@ -117,14 +121,6 @@ public class TeamManager {
      * Check if there is at least 1 player in each defender and attacker team online
      */
     public boolean isReady() {
-        Bukkit.broadcastMessage("defender online" + getOnlinePlayersByTeam(TeamType.DEFENDER).length);
-        for (Player defender : getOnlinePlayersByTeam(TeamType.DEFENDER)) {
-            Bukkit.broadcastMessage(defender.getName());
-        }
-        Bukkit.broadcastMessage("attacker online" + getOnlinePlayersByTeam(TeamType.ATTACKER).length);
-        for (Player attacker : getOnlinePlayersByTeam(TeamType.ATTACKER)) {
-            Bukkit.broadcastMessage(attacker.getName());
-        }
         return getOnlinePlayersByTeam(TeamType.ATTACKER).length >= 1 && getOnlinePlayersByTeam(TeamType.DEFENDER).length >= 1;
     }
 

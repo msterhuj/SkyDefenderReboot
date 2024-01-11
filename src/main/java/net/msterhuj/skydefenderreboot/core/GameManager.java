@@ -27,7 +27,7 @@ public class GameManager {
     private WorldManager worldManager;
 
     public GameManager() {
-        this.gameStatus = GameStatus.LOBBY;
+        setGameStatus(GameStatus.LOBBY);
         this.teleporterManager = new TeleporterManager();
         this.teamManager = new TeamManager();
         this.worldManager = new WorldManager();
@@ -37,7 +37,7 @@ public class GameManager {
         return this.gameStatus == gameStatus;
     }
 
-    public void setGameStatus(GameStatus newGameStatus, @Nullable CommandSender commandSender) {
+    public void setGameStatus(GameStatus newGameStatus) {
         // todo move other game event into this method and submethods for actions by game status
         if (isGameStatus(newGameStatus)) return;
         this.gameStatus = newGameStatus;

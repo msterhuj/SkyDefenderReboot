@@ -57,7 +57,7 @@ public class WorldManager {
     public static void setupBorderCenter(Location location) {
         WorldBorder worldBorder = getWorld().getWorldBorder();
         worldBorder.setCenter(location);
-        worldBorder.setSize(SkyDefenderReboot.getInstance().getConfig().getInt("worldborder.radius"));
+        worldBorder.setSize(SkyDefenderReboot.getInstance().getConfig().getInt("worldborder.finish_radius"));
     }
 
     public static void setDayBorder(int currentDay) {
@@ -73,6 +73,11 @@ public class WorldManager {
             double newRadius = startRadius - blocksToReduce;
             getWorld().getWorldBorder()
                     .setSize(newRadius, fileConfiguration.getInt("worldborder.movement_time") * 20L);
+        } else {
+            double currentRadius = getWorld().getWorldBorder().getSize();
+            if (currentRadius != startRadius) {
+                getWorld().getWorldBorder().setSize(startRadius);
+            }
         }
     }
 }

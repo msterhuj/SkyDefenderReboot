@@ -2,6 +2,7 @@ package net.msterhuj.skydefenderreboot.core.teams;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.GameStatus;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,6 +78,12 @@ public class TeamCommands { // todo update commands to permit to admin to add pl
             teamManager.addPlayerToTeam(player.getUniqueId(), teamType);
             plugin.saveGameManager();
             commandSender.sendMessage("§aYou joined the team " + teamType.getName());
+            // announce to other players
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                if (!onlinePlayer.getUniqueId().equals(player.getUniqueId())) {
+                    onlinePlayer.sendMessage("§e" + player.getName() + " has joined the team " + teamType.getName());
+                }
+            }
             return true;
         }
 

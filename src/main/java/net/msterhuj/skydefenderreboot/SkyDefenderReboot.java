@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import lombok.Getter;
 import net.msterhuj.skydefenderreboot.core.GameManager;
 import net.msterhuj.skydefenderreboot.core.GameTask;
+import net.msterhuj.skydefenderreboot.utils.GameConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -19,6 +20,9 @@ public final class SkyDefenderReboot extends JavaPlugin {
     private static GameManager gameManager;
 
     @Getter
+    private static GameConfig gameConfig;
+
+    @Getter
     private static CommandManager commandManager;
 
     @Getter
@@ -28,6 +32,7 @@ public final class SkyDefenderReboot extends JavaPlugin {
     public void onEnable() {
         instance = this;
         this.saveDefaultConfig();
+        gameConfig = new GameConfig();
         this.loadGameManager();
         commandManager = new CommandManager(this);
         listenerManager = new ListenerManager(this);

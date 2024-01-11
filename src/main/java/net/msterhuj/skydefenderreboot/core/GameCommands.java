@@ -2,6 +2,7 @@ package net.msterhuj.skydefenderreboot.core;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
+import net.msterhuj.skydefenderreboot.core.world.WorldManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,9 @@ public class GameCommands {
                 gameManager.setGameStatus(GameStatus.LOBBY);
                 return true;
             }
+
+            WorldManager.setDay(0);
+            WorldManager.setDayBorder(1);
 
             // todo add multi thread for teleporting players and add countdown
             teamManager.spreadPlayers();
