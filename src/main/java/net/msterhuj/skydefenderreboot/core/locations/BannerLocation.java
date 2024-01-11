@@ -15,6 +15,8 @@ public class BannerLocation {
         this.z = location.getBlockZ();
     }
 
+    // todo add function to check if the banner is present in the world at the location
+
     public Location getLocation() {
         return new Location(Bukkit.getWorld(this.worldUUID), this.x, this.y, this.z);
     }

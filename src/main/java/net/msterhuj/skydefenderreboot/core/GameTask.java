@@ -6,6 +6,7 @@ import net.msterhuj.skydefenderreboot.core.world.WorldTime;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/* TODO rework structure of this class with other class for event managing */
 public class GameTask extends BukkitRunnable {
 
     private int currentDay = 0;

@@ -19,12 +19,14 @@ public class GameListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         // todo move this to team manager on a method called "checkIfTeamWins"
+        // todo add a check when attacker is not online but its alive create a timer before defender team wins
+        // todo if defender team is not online the game automatically pause after 5 minutes
         TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
         TeamPlayer teamPlayer = teamManager.getTeamPlayer(event.getEntity());
         if (SkyDefenderReboot.getGameManager().isGameStatus(GameStatus.RUNNING)) {
             if (teamPlayer.getTeamType() == TeamType.ATTACKER) {
                 // check if he's the last one in the attacker team
-                if (teamManager.getTeamPlayers().stream().filter(teamPlayer1 -> teamPlayer1.getTeamType() == TeamType.ATTACKER).count() == 1) {
+                if (teamManager.getTeamPlayers().stream().filter(teamPlayer1 -> teamPlayer1.getTeamType() == TeamType.ATTACKER).count() == 1) { // todo redo this cause it's not logic :sob:
                     // defender team wins
                     Bukkit.broadcastMessage("§aDefender team wins!");
                     SkyDefenderReboot.getGameManager().setGameStatus(GameStatus.FINISH);

@@ -27,7 +27,6 @@ public class TeleporterManager {
     }
 
     public void addTeleporter(Player player, String teleporterName, TeleporterType teleporterType) {
-        Location location = player.getLocation();
         Teleporter teleporter = this.getTeleporter(teleporterName);
 
         // remove location if exist
@@ -37,10 +36,7 @@ public class TeleporterManager {
         }
 
         // register new location
-        TeleporterLocation newTeleporterLocation = new TeleporterLocation(player, teleporterType);
-        newTeleporterLocation.setupBock(player);
-        teleporter.setTeleporterLocation(newTeleporterLocation, teleporterType);
-
+        teleporter.setTeleporterLocation(new TeleporterLocation(player, teleporterType), teleporterType);
         this.teleporters.put(teleporterName, teleporter);
     }
 
@@ -50,11 +46,10 @@ public class TeleporterManager {
     }
 
     public void teleportPlayer(Player player, Location eventLocation) {
-
-
+        // todo add a cooldown to prevent teleportation loop
         for (Teleporter teleporter : this.teleporters.values()) {
             if (teleporter.isLocationOneOfTeleporter(eventLocation)) {
-                teleporter.teleportPlayer(eventLocation, player, true);
+                teleporter.teleportPlayer(player, true);
                 return;
             }
         }

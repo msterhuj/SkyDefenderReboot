@@ -33,6 +33,7 @@ public class TeamManager {
     }
 
     public void addPlayerToTeam(Player player, TeamType teamType) {
+        // todo replace player object by uuid to avoid incapacity to remove player from team when he is offline
         TeamPlayer teamPlayer = getTeamPlayer(player);
         if (teamPlayer != null) {
             teamPlayer.setTeamType(teamType);
@@ -40,6 +41,7 @@ public class TeamManager {
     }
 
     public void removePlayerFromTeam(Player player) {
+        // todo replace player object by uuid to avoid incapacity to remove player from team when he is offline
         TeamPlayer teamPlayer = getTeamPlayer(player);
         if (teamPlayer != null) {
             teamPlayer.setTeamType(TeamType.SPECTATOR);
@@ -60,6 +62,8 @@ public class TeamManager {
             destLocation = startLocation.getWorld().getHighestBlockAt(newX, newZ).getLocation();
         } while (destLocation.getBlock().isLiquid() || destLocation.distance(startLocation) < minSpreadDistanceFromLocation);
 
+        // todo load chunk in other thread to avoid lag
+
         return destLocation.add(0.5, 1.2, 0.5);
     }
 
@@ -71,33 +75,32 @@ public class TeamManager {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         int minSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.min");
         int maxSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.max");
-        for (Player attacker : getOnlineTeamPlayers(TeamType.ATTACKER)) {
+        for (Player attacker : getOnlinePlayersByTeam(TeamType.ATTACKER)) {
             attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation(),
                     minSpreadDistanceFromSpawn, maxSpreadDistanceFromSpawn));
             attacker.setGameMode(GameMode.SURVIVAL);
             attacker.getInventory().clear();
         }
         Location spawnLocation = SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation();
-        for (Player defender : getOnlineTeamPlayers(TeamType.DEFENDER)) {
+        for (Player defender : getOnlinePlayersByTeam(TeamType.DEFENDER)) {
             defender.teleport(spawnLocation);
             defender.setGameMode(GameMode.SURVIVAL);
             defender.getInventory().clear();
         }
-        for (Player spectator : getOnlineTeamPlayers(TeamType.SPECTATOR)) {
+        for (Player spectator : getOnlinePlayersByTeam(TeamType.SPECTATOR)) {
             spectator.teleport(spawnLocation);
             spectator.setGameMode(GameMode.SPECTATOR);
             spectator.getInventory().clear();
         }
     }
 
-    private Player[] getTeamPlayers(TeamType teamType) {
+    private TeamPlayer[] getTeamPlayersByTeam(TeamType teamType) {
         return teamPlayers.stream()
                 .filter(teamPlayer -> teamPlayer.getTeamType().equals(teamType))
-                .map(TeamPlayer::getPlayerByUUID)
-                .toArray(Player[]::new);
+                .toArray(TeamPlayer[]::new);
     }
 
-    private Player[] getOnlineTeamPlayers(TeamType teamType) {
+    private Player[] getOnlinePlayersByTeam(TeamType teamType) {
         return teamPlayers.stream()
                 .filter(teamPlayer -> teamPlayer.getTeamType().equals(teamType) && teamPlayer.isOnline())
                 .map(TeamPlayer::getPlayerByUUID)
@@ -112,15 +115,15 @@ public class TeamManager {
      * Check if there is at least 1 player in each defender and attacker team online
      */
     public boolean isReady() {
-        Bukkit.broadcastMessage("defender online" + getOnlineTeamPlayers(TeamType.DEFENDER).length);
-        for (Player defender : getOnlineTeamPlayers(TeamType.DEFENDER)) {
+        Bukkit.broadcastMessage("defender online" + getOnlinePlayersByTeam(TeamType.DEFENDER).length);
+        for (Player defender : getOnlinePlayersByTeam(TeamType.DEFENDER)) {
             Bukkit.broadcastMessage(defender.getName());
         }
-        Bukkit.broadcastMessage("attacker online" + getOnlineTeamPlayers(TeamType.ATTACKER).length);
-        for (Player attacker : getOnlineTeamPlayers(TeamType.ATTACKER)) {
+        Bukkit.broadcastMessage("attacker online" + getOnlinePlayersByTeam(TeamType.ATTACKER).length);
+        for (Player attacker : getOnlinePlayersByTeam(TeamType.ATTACKER)) {
             Bukkit.broadcastMessage(attacker.getName());
         }
-        return getOnlineTeamPlayers(TeamType.ATTACKER).length >= 1 && getOnlineTeamPlayers(TeamType.DEFENDER).length >= 1;
+        return getOnlinePlayersByTeam(TeamType.ATTACKER).length >= 1 && getOnlinePlayersByTeam(TeamType.DEFENDER).length >= 1;
     }
 
     public void resetTeams() {

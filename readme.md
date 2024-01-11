@@ -1,8 +1,11 @@
 # SkyDefenderReboot
 
 A very basic skydefender plugin still in development.
+
 This is a beta version, so it contain a lots of bugs.
+
 But the plugin is playable if its commited on master branch.
+
 Developed for 1.20.4 minecraft version (maybe work on other version idk)
 
 ## Commands
@@ -50,6 +53,11 @@ worldborder:
 ## TODO
 
 All the things I want to add/fix is on the [issues tab](https://github.com/msterhuj/SkyDefenderReboot/issues)
+
+And also on the code there is a lot of TODO comments
+
+If you want other features you can create an issue and
+I will see if I can add it, or you can add it yourself im open to pull requests :)
 
 ## Build
 

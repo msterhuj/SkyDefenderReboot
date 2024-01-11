@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.configuration.file.FileConfiguration;
 
+// todo remove static methods and use the instance of the class on game manager
 public class WorldManager {
 
     public static World getWorld() {
@@ -29,14 +30,14 @@ public class WorldManager {
         // Helper method to get the next time for the given WorldTime
         WorldTime[] values = WorldTime.values();
         int nextIndex = (worldTime.ordinal() + 1) % values.length;
-        return values[nextIndex].getTime();
+        return values[nextIndex].getTicks();
     }
 
     public static WorldTime getCurrentWorldTime() {
         int time = (int) (getWorld().getTime());
 
         for (WorldTime worldTime : WorldTime.values()) {
-            if (time >= worldTime.getTime() && time < getNextTime(worldTime)) {
+            if (time >= worldTime.getTicks() && time < getNextTime(worldTime)) {
                 return worldTime;
             }
         }

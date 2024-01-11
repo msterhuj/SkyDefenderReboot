@@ -23,6 +23,8 @@ public class TeleporterLocation {
         this.x = player.getLocation().getBlockX();
         this.y = player.getLocation().getBlockY();
         this.z = player.getLocation().getBlockZ();
+
+        setupBock(player);
     }
 
     public void setupBock(Player player) {

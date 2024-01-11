@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/* TODO improve the code cleanliness of this class and add javadoc */
 public class Commands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -59,9 +60,8 @@ public class Commands implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if (strings[0].equalsIgnoreCase("teleporter")) {
+        if (strings[0].equalsIgnoreCase("teleporter"))
             return (new TeleporterCommands()).run(commandSender, command, s, strings);
-        }
 
         if (strings[0].equalsIgnoreCase("team"))
             return (new TeamCommands()).run(commandSender, command, s, strings);

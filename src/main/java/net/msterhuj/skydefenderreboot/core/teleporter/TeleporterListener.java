@@ -12,12 +12,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class TeleporterListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
+        // todo add a check to prevent teleportation loop if its output (temporary fix)
         if (event.getAction().equals(Action.PHYSICAL)) {
             if (event.getClickedBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
-                TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
+                TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
                 if (teamManager.getTeamPlayer(event.getPlayer()).getTeamType() != TeamType.DEFENDER) return;
-                SkyDefenderReboot.getData().getTeleporterManager().teleportPlayer(event.getPlayer(), event.getClickedBlock().getLocation());
+                SkyDefenderReboot.getGameManager().getTeleporterManager().teleportPlayer(event.getPlayer(), event.getClickedBlock().getLocation());
             }
         }
     }
+
+    // todo add protection to prevent teleport destruction
 }
