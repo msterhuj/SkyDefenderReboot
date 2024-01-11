@@ -1,6 +1,7 @@
 package net.msterhuj.skydefenderreboot.core.world;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
+import net.msterhuj.skydefenderreboot.utils.GameConfig;
 import net.msterhuj.skydefenderreboot.utils.ServerPropertiesParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -57,22 +58,21 @@ public class WorldManager {
     public static void setupBorderCenter(Location location) {
         WorldBorder worldBorder = getWorld().getWorldBorder();
         worldBorder.setCenter(location);
-        worldBorder.setSize(SkyDefenderReboot.getInstance().getConfig().getInt("worldborder.finish_radius"));
+        worldBorder.setSize(SkyDefenderReboot.getGameConfig().getWorldborderFinishRadius());
     }
 
     public static void setDayBorder(int currentDay) {
-        FileConfiguration fileConfiguration = SkyDefenderReboot.getInstance().getConfig();
-        int startReduceAtDay = fileConfiguration.getInt("worldborder.start_reduce_at_day");
-        int finishReduceAtDay = fileConfiguration.getInt("worldborder.finish_reduce_at_day");
-        int startRadius = fileConfiguration.getInt("worldborder.start_radius");
-        int finishRadius = fileConfiguration.getInt("worldborder.finish_radius");
+        GameConfig gameConfig = SkyDefenderReboot.getGameConfig();
+        int startReduceAtDay = gameConfig.getWorldborderStartReduceAtDay();
+        int finishReduceAtDay = gameConfig.getWorldborderFinishReduceAtDay();
+        int startRadius = gameConfig.getWorldborderStartRadius();
+        int finishRadius = gameConfig.getWorldborderFinishRadius();
 
         if (currentDay >= startReduceAtDay) {
             double blocksPerDay = (double) (startRadius - finishRadius) / (finishReduceAtDay - startReduceAtDay);
             double blocksToReduce = blocksPerDay * (currentDay - startReduceAtDay);
             double newRadius = startRadius - blocksToReduce;
-            getWorld().getWorldBorder()
-                    .setSize(newRadius, fileConfiguration.getInt("worldborder.movement_time") * 20L);
+            getWorld().getWorldBorder() .setSize(newRadius, gameConfig.getWorldborderMovementTime() * 20L);
         } else {
             double currentRadius = getWorld().getWorldBorder().getSize();
             if (currentRadius != startRadius) {

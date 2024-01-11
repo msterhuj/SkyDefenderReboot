@@ -5,6 +5,7 @@ import lombok.Data;
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.GameManager;
 import net.msterhuj.skydefenderreboot.core.world.WorldManager;
+import net.msterhuj.skydefenderreboot.utils.GameConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -74,9 +75,9 @@ public class TeamManager {
      */
     public void spreadPlayers() {
         // todo add check if worldborder if to small compared to teleporter radius and warn in console
-        SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
-        int minSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.min");
-        int maxSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.max");
+        GameConfig gameConfig = SkyDefenderReboot.getGameConfig();
+        int minSpreadDistanceFromSpawn = gameConfig.getSpreadDistanceFromSpawnMin();
+        int maxSpreadDistanceFromSpawn = gameConfig.getSpreadDistanceFromSpawnMax();
         for (Player attacker : getOnlinePlayersByTeam(TeamType.ATTACKER)) {
             attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation(),
                     minSpreadDistanceFromSpawn, maxSpreadDistanceFromSpawn));

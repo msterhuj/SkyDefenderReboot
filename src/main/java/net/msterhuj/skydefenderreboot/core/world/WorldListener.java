@@ -13,7 +13,7 @@ public class WorldListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerPortal(PlayerPortalEvent event) {
         // todo setup a function check on world manager to check if the player can go to the nether to simplify this function
-        int allowNetherAtDay = SkyDefenderReboot.getInstance().getConfig().getInt("allow_nether_at_day");
+        int allowNetherAtDay = SkyDefenderReboot.getGameConfig().getAllowNetherAtDay();
         int currentDay = WorldManager.getDay();
         TeamPlayer teamPlayer = SkyDefenderReboot.getGameManager().getTeamManager().getTeamPlayer(event.getPlayer());
         if (event.getTo().getWorld().getEnvironment() == World.Environment.NETHER) {

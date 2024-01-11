@@ -51,12 +51,12 @@ public class GameTask extends BukkitRunnable {
         }
         // annouce
         // announce nether if it's not announced yet, and it's day from the config
-        if (!this.netherAnnounced && this.currentDay == instance.getConfig().getInt("allow_nether_at_day")) {
+        if (!this.netherAnnounced && this.currentDay == SkyDefenderReboot.getGameConfig().getAllowNetherAtDay()) {
             Bukkit.broadcastMessage("§aNether is now open for everyone!");
             this.netherAnnounced = true;
         }
         // check if worldborder should be shrunk
-        if (instance.getConfig().getInt("worldborder.start_reduce_at_day") >= this.currentDay) {
+        if (SkyDefenderReboot.getGameConfig().getWorldborderStartReduceAtDay() >= this.currentDay) {
             WorldManager.setDayBorder(this.currentDay);
         }
     }
