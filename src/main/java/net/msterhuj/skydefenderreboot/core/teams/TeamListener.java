@@ -24,7 +24,10 @@ public class TeamListener implements Listener {
                 server.broadcastMessage("§aWaiting for players...");
                 if (!player.isOp()) {
                     player.setGameMode(GameMode.ADVENTURE);
-                    player.teleport(SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation().add(0.5, 0.2, 0.5));
+                    if (GameManager.getInstance().getSpawnLocation().getLocation() == null) {
+                        player.sendMessage("§cSpawn location not set!");
+                        SkyDefenderReboot.getInstance().getLogger().warning("Spawn location not set player " + player.getName() + " cannot be teleported to spawn!");
+                    } else player.teleport(SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation().add(0.5, 0.2, 0.5));
                 }
                 break;
 
