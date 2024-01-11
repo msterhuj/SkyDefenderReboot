@@ -1,5 +1,8 @@
 package net.msterhuj.skydefenderreboot.core.teams;
 
+import lombok.Getter;
+
+@Getter
 public enum TeamType {
     DEFENDER("defender"),
     ATTACKER("attacker"),
@@ -16,9 +19,5 @@ public enum TeamType {
             if (teamType.getName().equalsIgnoreCase(string)) return teamType;
         }
         return null;
-    }
-
-    public String getName() {
-        return name;
     }
 }

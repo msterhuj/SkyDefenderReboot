@@ -32,17 +32,15 @@ public class TeamManager {
         return false;
     }
 
-    public void addPlayerToTeam(Player player, TeamType teamType) {
-        // todo replace player object by uuid to avoid incapacity to remove player from team when he is offline
-        TeamPlayer teamPlayer = getTeamPlayer(player);
+    public void addPlayerToTeam(UUID uuid, TeamType teamType) {
+        TeamPlayer teamPlayer = getTeamPlayer(uuid);
         if (teamPlayer != null) {
             teamPlayer.setTeamType(teamType);
         }
     }
 
-    public void removePlayerFromTeam(Player player) {
-        // todo replace player object by uuid to avoid incapacity to remove player from team when he is offline
-        TeamPlayer teamPlayer = getTeamPlayer(player);
+    public void removePlayerFromTeam(UUID uuid) {
+        TeamPlayer teamPlayer = getTeamPlayer(uuid);
         if (teamPlayer != null) {
             teamPlayer.setTeamType(TeamType.SPECTATOR);
         }
@@ -109,6 +107,10 @@ public class TeamManager {
 
     public TeamPlayer getTeamPlayer(Player player) {
         return teamPlayers.stream().filter(teamPlayer -> teamPlayer.getUuid().equals(player.getUniqueId())).findFirst().orElse(null);
+    }
+
+    public TeamPlayer getTeamPlayer(UUID uuid) {
+        return teamPlayers.stream().filter(teamPlayer -> teamPlayer.getUuid().equals(uuid)).findFirst().orElse(null);
     }
 
     /*

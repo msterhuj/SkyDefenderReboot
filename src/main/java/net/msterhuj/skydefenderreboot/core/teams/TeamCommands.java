@@ -74,7 +74,7 @@ public class TeamCommands { // todo update commands to permit to admin to add pl
                 commandSender.sendMessage("§cTeam not found");
                 return true;
             }
-            teamManager.addPlayerToTeam(player, teamType);
+            teamManager.addPlayerToTeam(player.getUniqueId(), teamType);
             plugin.saveGameManager();
             commandSender.sendMessage("§aYou joined the team " + teamType.getName());
             return true;
@@ -85,7 +85,7 @@ public class TeamCommands { // todo update commands to permit to admin to add pl
                 commandSender.sendMessage("§cYou are already a spectator");
                 return true;
             }
-            teamManager.removePlayerFromTeam(player);
+            teamManager.removePlayerFromTeam(player.getUniqueId());
             commandSender.sendMessage("§aYou left your team (you are now a spectator)");
             plugin.saveGameManager();
             return true;
