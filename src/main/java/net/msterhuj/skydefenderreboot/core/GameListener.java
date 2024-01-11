@@ -18,16 +18,17 @@ public class GameListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
+        // todo move this to team manager on a method called "checkIfTeamWins"
+        TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
         TeamPlayer teamPlayer = teamManager.getTeamPlayer(event.getEntity());
-        if (SkyDefenderReboot.getData().isGameStatus(GameStatus.RUNNING)) {
+        if (SkyDefenderReboot.getGameManager().isGameStatus(GameStatus.RUNNING)) {
             if (teamPlayer.getTeamType() == TeamType.ATTACKER) {
                 // check if he's the last one in the attacker team
                 if (teamManager.getTeamPlayers().stream().filter(teamPlayer1 -> teamPlayer1.getTeamType() == TeamType.ATTACKER).count() == 1) {
                     // defender team wins
                     Bukkit.broadcastMessage("§aDefender team wins!");
-                    SkyDefenderReboot.getData().setGameStatus(GameStatus.FINISH);
-                    SkyDefenderReboot.getInstance().saveData();
+                    SkyDefenderReboot.getGameManager().setGameStatus(GameStatus.FINISH);
+                    SkyDefenderReboot.getInstance().saveGameManager();
                 }
             }
         }
@@ -35,9 +36,12 @@ public class GameListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        // todo add a method to check if the player can break the block by checking the game status
+
+        // todo move this to team manager on a method called "checkIfTeamWins"
         // check if it's the banner
-        Location bannerLocation = SkyDefenderReboot.getData().getBannerLocation().getLocation();
-        TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
+        Location bannerLocation = SkyDefenderReboot.getGameManager().getBannerLocation().getLocation();
+        TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
         if (event.getBlock().getLocation().equals(bannerLocation)) {
             if (teamManager.getTeamPlayer(event.getPlayer()).isTeam(TeamType.DEFENDER)) {
                 event.setCancelled(true);
@@ -46,8 +50,8 @@ public class GameListener implements Listener {
             }
             // attacker team wins
             Bukkit.broadcastMessage("§aAttacker team wins!");
-            SkyDefenderReboot.getData().setGameStatus(GameStatus.FINISH);
-            SkyDefenderReboot.getInstance().saveData();
+            SkyDefenderReboot.getGameManager().setGameStatus(GameStatus.FINISH);
+            SkyDefenderReboot.getInstance().saveGameManager();
         }
     }
 
@@ -58,18 +62,20 @@ public class GameListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
+
+        // move this to a method in banner location class
         Player player = event.getPlayer();
         if (player.hasMetadata("setup_banner")) {
             player.removeMetadata("setup_banner", SkyDefenderReboot.getInstance());
-            if (SkyDefenderReboot.getData().getGameStatus() != GameStatus.WAITING) {
+            if (SkyDefenderReboot.getGameManager().getGameStatus() != GameStatus.LOBBY) {
                 player.sendMessage("§cYou can't do this now (game is started)");
                 return;
             }
             // if Material contains BANNER then set the banner
             if (event.getClickedBlock().getType().toString().contains("BANNER")) {
-                GameData gameData = SkyDefenderReboot.getData();
-                gameData.setBannerLocation(new BannerLocation(event.getClickedBlock().getLocation()));
-                SkyDefenderReboot.getInstance().saveData();
+                GameManager gameManager = SkyDefenderReboot.getGameManager();
+                gameManager.setBannerLocation(new BannerLocation(event.getClickedBlock().getLocation()));
+                SkyDefenderReboot.getInstance().saveGameManager();
                 player.sendMessage("§aBanner set!");
             } else {
                 player.sendMessage("§cYou must click on a banner!");

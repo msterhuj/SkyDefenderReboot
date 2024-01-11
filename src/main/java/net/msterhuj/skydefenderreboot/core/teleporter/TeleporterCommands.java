@@ -18,7 +18,7 @@ public class TeleporterCommands {
         Player player = (Player) commandSender;
 
         // disable command if game is started
-        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.RUNNING) {
+        if (SkyDefenderReboot.getGameManager().getGameStatus() == GameStatus.RUNNING) {
             commandSender.sendMessage("§cYou can't do this now");
             return true;
         }
@@ -32,8 +32,8 @@ public class TeleporterCommands {
         if (strings[1].equalsIgnoreCase("reset")) {
             // resettp <name>
             if (strings.length == 3) {
-                SkyDefenderReboot.getData().getTeleporterManager().resetTeleporter(strings[2]);
-                SkyDefenderReboot.getInstance().saveData();
+                SkyDefenderReboot.getGameManager().getTeleporterManager().resetTeleporter(strings[2]);
+                SkyDefenderReboot.getInstance().saveGameManager();
                 player.sendMessage("§aTeleporter reset!");
             } else {
                 player.sendMessage("§cUse §e/skydefenderreboot  §cfor help");
@@ -48,8 +48,8 @@ public class TeleporterCommands {
                 player.sendMessage("§cUse §e/skydefenderreboot  §cfor help");
                 return true;
             }
-            SkyDefenderReboot.getData().getTeleporterManager().addTeleporter(player, strings[2], TeleporterType.INPUT);
-            SkyDefenderReboot.getInstance().saveData();
+            SkyDefenderReboot.getGameManager().getTeleporterManager().addTeleporter(player, strings[2], TeleporterType.INPUT);
+            SkyDefenderReboot.getInstance().saveGameManager();
             player.sendMessage("§aTeleporter set!");
             return true;
         }
@@ -61,8 +61,8 @@ public class TeleporterCommands {
                 return true;
             }
             // settpout <name>
-            SkyDefenderReboot.getData().getTeleporterManager().addTeleporter(player, strings[2], TeleporterType.OUTPUT);
-            SkyDefenderReboot.getInstance().saveData();
+            SkyDefenderReboot.getGameManager().getTeleporterManager().addTeleporter(player, strings[2], TeleporterType.OUTPUT);
+            SkyDefenderReboot.getInstance().saveGameManager();
             player.sendMessage("§aTeleporter set!");
             return true;
         }
@@ -81,12 +81,12 @@ public class TeleporterCommands {
 
         if (strings.length == 3) {
             if (strings[1].equalsIgnoreCase("reset")) {
-                list.addAll(SkyDefenderReboot.getData().getTeleporterManager().getTeleporters().keySet());
+                list.addAll(SkyDefenderReboot.getGameManager().getTeleporterManager().getTeleporters().keySet());
                 return list.stream().filter(stream -> stream.startsWith(strings[2])).collect(Collectors.toList());
             }
 
             if (strings[1].equalsIgnoreCase("setin") || strings[1].equalsIgnoreCase("setout")) {
-                list.addAll(SkyDefenderReboot.getData().getTeleporterManager().getTeleporters().keySet());
+                list.addAll(SkyDefenderReboot.getGameManager().getTeleporterManager().getTeleporters().keySet());
                 List<String> filtered = list.stream()
                         .filter(stream -> stream.startsWith(strings[2])).collect(Collectors.toList());
                 filtered.add("<name>");

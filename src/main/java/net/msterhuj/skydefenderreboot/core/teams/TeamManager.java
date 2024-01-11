@@ -72,12 +72,12 @@ public class TeamManager {
         int minSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.min");
         int maxSpreadDistanceFromSpawn = plugin.getConfig().getInt("spread_distance_from_spawn.max");
         for (Player attacker : getOnlineTeamPlayers(TeamType.ATTACKER)) {
-            attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getData().getSpawnLocation().getLocation(),
+            attacker.teleport(getRandomHighestSafeLocation(SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation(),
                     minSpreadDistanceFromSpawn, maxSpreadDistanceFromSpawn));
             attacker.setGameMode(GameMode.SURVIVAL);
             attacker.getInventory().clear();
         }
-        Location spawnLocation = SkyDefenderReboot.getData().getSpawnLocation().getLocation();
+        Location spawnLocation = SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation();
         for (Player defender : getOnlineTeamPlayers(TeamType.DEFENDER)) {
             defender.teleport(spawnLocation);
             defender.setGameMode(GameMode.SURVIVAL);

@@ -27,7 +27,7 @@ public class Commands implements CommandExecutor, TabCompleter {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         plugin.getLogger().info(Arrays.toString(strings));
 
-        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.STARTING) {
+        if (SkyDefenderReboot.getGameManager().getGameStatus() == GameStatus.STARTING) {
             commandSender.sendMessage("§cYou can't do this now (game is starting)");
             return true;
         }
@@ -43,8 +43,8 @@ public class Commands implements CommandExecutor, TabCompleter {
 
         // setspawn
         if (strings[0].equalsIgnoreCase("setspawn")) {
-            SkyDefenderReboot.getData().setSpawnLocation(new SpawnLocation(player));
-            SkyDefenderReboot.getInstance().saveData();
+            SkyDefenderReboot.getGameManager().setSpawnLocation(new SpawnLocation(player));
+            SkyDefenderReboot.getInstance().saveGameManager();
             player.getWorld().setSpawnLocation(player.getLocation());
             WorldManager.setupBorderCenter(player.getLocation());
             player.sendMessage("§aWorldSpawn set!");

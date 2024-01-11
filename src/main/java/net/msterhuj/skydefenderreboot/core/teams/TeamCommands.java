@@ -13,19 +13,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TeamCommands {
+public class TeamCommands { // todo update commands to permit to admin to add player to a team and console to use this command without crashing x)
     public boolean run(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
 
         // disable command if game is started
-        if (SkyDefenderReboot.getData().getGameStatus() == GameStatus.RUNNING) {
+        if (SkyDefenderReboot.getGameManager().getGameStatus() == GameStatus.RUNNING) {
             commandSender.sendMessage("§cYou can't do this now");
             return true;
         }
 
-        TeamManager teamManager = SkyDefenderReboot.getData().getTeamManager();
-        Player player = (Player) commandSender;
+        TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
+        Player player = (Player) commandSender; // I see you crashing by console
         TeamPlayer teamPlayer = teamManager.getTeamPlayer(player);
 
         // team
@@ -75,7 +75,7 @@ public class TeamCommands {
                 return true;
             }
             teamManager.addPlayerToTeam(player, teamType);
-            plugin.saveData();
+            plugin.saveGameManager();
             commandSender.sendMessage("§aYou joined the team " + teamType.getName());
             return true;
         }
@@ -87,7 +87,7 @@ public class TeamCommands {
             }
             teamManager.removePlayerFromTeam(player);
             commandSender.sendMessage("§aYou left your team (you are now a spectator)");
-            plugin.saveData();
+            plugin.saveGameManager();
             return true;
         }
 

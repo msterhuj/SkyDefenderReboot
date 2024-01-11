@@ -15,7 +15,7 @@ public class GameTask extends BukkitRunnable {
     @Override
     public void run() { // run every second
         SkyDefenderReboot instance = SkyDefenderReboot.getInstance();
-        GameData data = SkyDefenderReboot.getData();
+        GameManager data = SkyDefenderReboot.getGameManager();
         // check if game is started
         if (!data.isGameStatus(GameStatus.RUNNING)) return;
 

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class GameCommands {
     public boolean run(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
-        GameData gameData = SkyDefenderReboot.getData();
+        GameManager gameManager = SkyDefenderReboot.getGameManager();
 
         // game
         if (strings.length == 1) {
@@ -24,24 +24,25 @@ public class GameCommands {
 
         // start
         if (strings[1].equalsIgnoreCase("start")) {
-            if (gameData.getGameStatus() != GameStatus.WAITING) {
+            // move all check for checking if game is ready to game manager
+            if (gameManager.getGameStatus() != GameStatus.LOBBY) {
                 commandSender.sendMessage("§cYou can't do this now");
                 return true;
             }
-            gameData.setGameStatus(GameStatus.STARTING);
+            gameManager.setGameStatus(GameStatus.STARTING);
 
             // check if spawn is set
-            if (gameData.getSpawnLocation() == null) {
+            if (gameManager.getSpawnLocation() == null) {
                 commandSender.sendMessage("§cYou need to set spawn first");
-                gameData.setGameStatus(GameStatus.WAITING);
+                gameManager.setGameStatus(GameStatus.LOBBY);
                 return true;
             }
 
             // check if there is at least 2 players in each team
-            TeamManager teamManager = gameData.getTeamManager();
+            TeamManager teamManager = gameManager.getTeamManager();
             if (!teamManager.isReady()) {
                 commandSender.sendMessage("§cYou need at least 1 players in attacker and defender teams online to start the game");
-                gameData.setGameStatus(GameStatus.WAITING);
+                gameManager.setGameStatus(GameStatus.LOBBY);
                 return true;
             }
 
@@ -49,17 +50,18 @@ public class GameCommands {
             teamManager.spreadPlayers();
 
 
-            gameData.setGameStatus(GameStatus.RUNNING);
-            plugin.saveData();
+            gameManager.setGameStatus(GameStatus.RUNNING);
+            plugin.saveGameManager();
             return true;
         }
 
         // reset
         if (strings[1].equalsIgnoreCase("reset")) {
-            TeamManager teamManager = gameData.getTeamManager();
+            // move this to game manager reset method
+            TeamManager teamManager = gameManager.getTeamManager();
             teamManager.resetTeams();
-            gameData.setGameStatus(GameStatus.WAITING);
-            plugin.saveData();
+            gameManager.setGameStatus(GameStatus.LOBBY);
+            plugin.saveGameManager();
             commandSender.sendMessage("§aGame reset");
             return true;
         }

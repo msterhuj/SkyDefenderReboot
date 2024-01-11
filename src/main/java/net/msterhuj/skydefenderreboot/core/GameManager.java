@@ -11,9 +11,12 @@ import lombok.Data;
 import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterManager;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
+import org.bukkit.command.CommandSender;
+
+import javax.annotation.Nullable;
 
 @Data
-public class GameData {
+public class GameManager {
 
     private GameStatus gameStatus;
     private SpawnLocation spawnLocation;
@@ -21,25 +24,24 @@ public class GameData {
 
     private TeleporterManager teleporterManager;
     private TeamManager teamManager;
+    private WorldManager worldManager;
 
-    public GameData() {
-        this.gameStatus = GameStatus.WAITING;
+    public GameManager() {
+        this.gameStatus = GameStatus.LOBBY;
         this.teleporterManager = new TeleporterManager();
         this.teamManager = new TeamManager();
-    }
-
-    public static GameData getData() {
-        return SkyDefenderReboot.getData();
+        this.worldManager = new WorldManager();
     }
 
     public boolean isGameStatus(GameStatus gameStatus) {
         return this.gameStatus == gameStatus;
     }
 
-    public void setGameStatus(GameStatus gameStatus) {
-        if (this.gameStatus == gameStatus) return;
-        this.gameStatus = gameStatus;
-        switch (gameStatus) {
+    public void setGameStatus(GameStatus newGameStatus, @Nullable CommandSender commandSender) {
+        // todo move other game event into this method and submethods for actions by game status
+        if (isGameStatus(newGameStatus)) return;
+        this.gameStatus = newGameStatus;
+        switch (newGameStatus) {
             case RUNNING:
                 WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
                 WorldManager.setDay(0);
@@ -53,5 +55,9 @@ public class GameData {
                 WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
                 break;
         }
+    }
+
+    public static GameManager getInstance() {
+        return SkyDefenderReboot.getGameManager();
     }
 }
