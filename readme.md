@@ -49,20 +49,9 @@ worldborder:
 
 ## TODO
 
-- [ ] Add a more commands and admin commands
-- [ ] Add pause system
-- [ ] Add a reload command
-- [ ] Setup better permissions
-- [ ] Add a team system for multiple attacker team and one defender team
-- [ ] Add a sky protection and remove after x days
-- [ ] Add a friendly fire system
-- [ ] when game is waitting if player go to far from spawn they will be teleported back to spawn
-- [ ] show team on tab
-- [ ] add command to load game data on fly
-- [ ] compare world border with player rtp max
-- [ ] fix defender respawn location
+All the things I want to add/fix is on the [issues tab](https://github.com/msterhuj/SkyDefenderReboot/issues)
 
-## build
+## Build
 
 ```bash
 mvn clean package
