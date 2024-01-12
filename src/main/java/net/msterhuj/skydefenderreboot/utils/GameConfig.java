@@ -37,4 +37,13 @@ public class GameConfig {
         worldborderFinishRadius = fileConfiguration.getInt("worldborder.finish_radius");
         worldborderMovementTime = fileConfiguration.getInt("worldborder.movement_time");
     }
+
+    public void reload() {
+        SkyDefenderReboot.getInstance().reloadConfig();
+        load();
+    }
+
+    public boolean validate() {
+        return true;
+    }
 }

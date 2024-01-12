@@ -39,23 +39,32 @@ public class Commands implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        Player player = (Player) commandSender;
-
         // setspawn
         if (strings[0].equalsIgnoreCase("setspawn")) {
-            SkyDefenderReboot.getGameManager().setSpawnLocation(new SpawnLocation(player));
-            SkyDefenderReboot.getInstance().saveGameManager();
-            player.getWorld().setSpawnLocation(player.getLocation());
-            WorldManager.setupBorderCenter(player.getLocation());
-            player.sendMessage("§aWorldSpawn set!");
+            if (commandSender instanceof Player) {
+                Player player = (Player) commandSender;
+
+                SkyDefenderReboot.getGameManager().setSpawnLocation(new SpawnLocation(player));
+                SkyDefenderReboot.getInstance().saveGameManager();
+                player.getWorld().setSpawnLocation(player.getLocation());
+                WorldManager.setupBorderCenter(player.getLocation());
+                player.sendMessage("§aWorldSpawn set!");
+            } else {
+                commandSender.sendMessage("§cYou must be a player to use this command");
+            }
             return true;
+
         }
 
         // serbanner
         if (strings[0].equalsIgnoreCase("setbanner")) {
-            Player p = (Player) commandSender;
-            player.setMetadata("setup_banner", new FixedMetadataValue(plugin, true));
-            player.sendMessage("§aRight click on the banner");
+            if (commandSender instanceof Player) {
+                Player player = (Player) commandSender;
+                player.setMetadata("setup_banner", new FixedMetadataValue(plugin, true));
+                player.sendMessage("§aRight click on the banner");
+            } else {
+                commandSender.sendMessage("§cYou must be a player to use this command");
+            }
             return true;
         }
 

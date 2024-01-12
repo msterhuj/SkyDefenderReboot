@@ -11,9 +11,6 @@ import lombok.Data;
 import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterManager;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
-import org.bukkit.command.CommandSender;
-
-import javax.annotation.Nullable;
 
 @Data
 public class GameManager {
@@ -21,6 +18,7 @@ public class GameManager {
     private GameStatus gameStatus;
     private SpawnLocation spawnLocation;
     private BannerLocation bannerLocation;
+    private GameCache gameCache;
 
     private TeleporterManager teleporterManager;
     private TeamManager teamManager;
@@ -31,6 +29,7 @@ public class GameManager {
         this.teleporterManager = new TeleporterManager();
         this.teamManager = new TeamManager();
         this.worldManager = new WorldManager();
+        this.gameCache = new GameCache();
     }
 
     public boolean isGameStatus(GameStatus gameStatus) {
@@ -38,23 +37,68 @@ public class GameManager {
     }
 
     public void setGameStatus(GameStatus newGameStatus) {
-        // todo move other game event into this method and submethods for actions by game status
         if (isGameStatus(newGameStatus)) return;
         this.gameStatus = newGameStatus;
         switch (newGameStatus) {
             case RUNNING:
-                WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
-                WorldManager.setDay(0);
+                applyStarting();
                 break;
             case FINISH:
-                Bukkit.broadcastMessage("§aGame finished!");
-                for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {
-                    if (!teamPlayer.isOnline()) continue;
-                    teamPlayer.getPlayerByUUID().setGameMode(GameMode.CREATIVE);
-                }
-                WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+                applyRunning();
                 break;
         }
+    }
+
+    private boolean applyLobby() {
+        return true;
+    }
+
+    private boolean applyStarting() {
+        if (!isGameStatus(GameStatus.STARTING)) return false;
+
+        WorldManager.setDay(0);
+        WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+
+        return true;
+    }
+
+    private boolean applyRunning() {
+        if (!isGameStatus(GameStatus.RUNNING)) return false;
+        return true;
+    }
+
+    private boolean applyPaused() {
+        if (!isGameStatus(GameStatus.PAUSED)) return false;
+
+        WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+
+        return true;
+    }
+
+    private boolean applyResuming() {
+        if (!isGameStatus(GameStatus.RESUMING)) return false;
+
+        WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+
+        return true;
+    }
+
+    private boolean applyFinish() {
+        if (!isGameStatus(GameStatus.FINISH)) return false;
+
+        Bukkit.broadcastMessage("§aGame finished!");
+        for (TeamPlayer teamPlayer : this.teamManager.getTeamPlayers()) {
+            if (!teamPlayer.isOnline()) continue;
+            teamPlayer.getPlayerByUUID().setGameMode(GameMode.CREATIVE);
+        }
+        WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+
+        return true;
+    }
+
+    private boolean applyResetting() {
+        if (!isGameStatus(GameStatus.RESETTING)) return false;
+        return true;
     }
 
     public static GameManager getInstance() {

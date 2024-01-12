@@ -10,7 +10,7 @@ import java.util.Properties;
  */
 public class ServerPropertiesParser {
 
-    private static String serverPropertiesPath = "server.properties";
+    private static final String serverPropertiesPath = "server.properties";
 
     /**
      * Retrieves a string value from the server.properties file based on the provided key.
