@@ -26,6 +26,7 @@ public class GameManager {
 
     public GameManager() {
         setGameStatus(GameStatus.LOBBY);
+        this.bannerLocation = new BannerLocation();
         this.teleporterManager = new TeleporterManager();
         this.teamManager = new TeamManager();
         this.worldManager = new WorldManager();

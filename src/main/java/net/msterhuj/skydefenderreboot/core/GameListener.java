@@ -1,23 +1,20 @@
 package net.msterhuj.skydefenderreboot.core;
 
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
-import net.msterhuj.skydefenderreboot.core.locations.BannerLocation;
 import net.msterhuj.skydefenderreboot.core.teams.TeamManager;
 import net.msterhuj.skydefenderreboot.core.teams.TeamPlayer;
 import net.msterhuj.skydefenderreboot.core.teams.TeamType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import javax.xml.transform.Result;
 
 public class GameListener implements Listener {
 
@@ -52,8 +49,18 @@ public class GameListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (GameManager.getInstance().isGameStatus(GameStatus.LOBBY, GameStatus.PAUSED) && !event.getPlayer().isOp()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         // todo add a method to check if the player can break the block by checking the game status
+        if (GameManager.getInstance().isGameStatus(GameStatus.LOBBY, GameStatus.PAUSED) && !event.getPlayer().isOp()) {
+            event.setCancelled(true);
+        }
 
         // todo move this to team manager on a method called "checkIfTeamWins"
         // check if it's the banner
@@ -79,25 +86,7 @@ public class GameListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-
-        // move this to a method in banner location class
-        Player player = event.getPlayer();
-        if (player.hasMetadata("setup_banner")) {
-            player.removeMetadata("setup_banner", SkyDefenderReboot.getInstance());
-            if (SkyDefenderReboot.getGameManager().getGameStatus() != GameStatus.LOBBY) {
-                player.sendMessage("§cYou can't do this now (game is started)");
-                return;
-            }
-            // if Material contains BANNER then set the banner
-            if (event.getClickedBlock().getType().toString().contains("BANNER")) {
-                GameManager gameManager = SkyDefenderReboot.getGameManager();
-                gameManager.setBannerLocation(new BannerLocation(event.getClickedBlock().getLocation()));
-                SkyDefenderReboot.getInstance().saveGameManager();
-                player.sendMessage("§aBanner set!");
-            } else {
-                player.sendMessage("§cYou must click on a banner!");
-            }
-        }
+        GameManager.getInstance().getBannerLocation().handleSetup(event);
     }
 }
 

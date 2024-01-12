@@ -151,7 +151,7 @@ public class TeamManager {
             case RUNNING:
                 if (teamPlayer.isAlive()) player.setGameMode(GameMode.SURVIVAL);
                 else player.setGameMode(GameMode.SPECTATOR);
-                
+
                 event.setRespawnLocation(GameManager.getInstance().getSpawnLocation().getLocation());
 
             default:
@@ -159,6 +159,11 @@ public class TeamManager {
                 SkyDefenderReboot.getInstance().getLogger()
                         .warning("PlayerRespawn > cant handle respawn for player " + player.getName() +  " gamemode set to spectator");
         }
+    }
+
+    public boolean checkIfTeamWins() {
+        // todo
+        return false;
     }
 
     public void resetTeams() {
