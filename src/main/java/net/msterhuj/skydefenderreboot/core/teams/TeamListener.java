@@ -1,5 +1,6 @@
 package net.msterhuj.skydefenderreboot.core.teams;
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.GameManager;
 import net.msterhuj.skydefenderreboot.core.GameStatus;
@@ -52,13 +53,11 @@ public class TeamListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        // todo move to function for handling player death
-        if (GameManager.getInstance().isGameStatus(GameStatus.LOBBY)) return;
-        Player player = event.getEntity();
-        TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
-        TeamPlayer teamPlayer = teamManager.getTeamPlayer(player);
-        if(teamPlayer.getTeamType() == TeamType.DEFENDER) return;
-        teamPlayer.setAlive(false);
-        player.setGameMode(GameMode.SPECTATOR);
+        GameManager.getInstance().getTeamManager().handlePlayerDeath(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerPostRespawn(PlayerPostRespawnEvent event) {
+        GameManager.getInstance().getTeamManager().handlePlayerRespawn(event);
     }
 }

@@ -32,8 +32,11 @@ public class GameManager {
         this.gameCache = new GameCache();
     }
 
-    public boolean isGameStatus(GameStatus gameStatus) {
-        return this.gameStatus == gameStatus;
+    public boolean isGameStatus(GameStatus... gameStatusList) {
+        for (GameStatus check: gameStatusList) {
+            if (gameStatus == check) return true;
+        }
+        return false;
     }
 
     public void setGameStatus(GameStatus newGameStatus) {

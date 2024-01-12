@@ -1,15 +1,20 @@
 package net.msterhuj.skydefenderreboot.core.teams;
 
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import lombok.Data;
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.GameManager;
+import net.msterhuj.skydefenderreboot.core.GameStatus;
 import net.msterhuj.skydefenderreboot.core.world.WorldManager;
 import net.msterhuj.skydefenderreboot.utils.GameConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -60,11 +65,9 @@ public class TeamManager {
             newX = startLocation.getBlockX() + random.nextInt(-maxSpreadDistanceFromLocation, maxSpreadDistanceFromLocation);
             newZ = startLocation.getBlockZ() + random.nextInt(-maxSpreadDistanceFromLocation, maxSpreadDistanceFromLocation);
 
+            // todo load chunk in other thread to avoid lag
             destLocation = startLocation.getWorld().getHighestBlockAt(newX, newZ).getLocation();
         } while (destLocation.getBlock().isLiquid() || destLocation.distance(startLocation) < minSpreadDistanceFromLocation);
-
-
-        // todo load chunk in other thread to avoid lag
 
         return destLocation.add(0.5, 1.2, 0.5);
     }
@@ -123,6 +126,37 @@ public class TeamManager {
      */
     public boolean isReady() {
         return getOnlinePlayersByTeam(TeamType.ATTACKER).length >= 1 && getOnlinePlayersByTeam(TeamType.DEFENDER).length >= 1;
+    }
+
+    public void handlePlayerDeath(PlayerDeathEvent event) {
+        if (GameManager.getInstance().isGameStatus(
+                GameStatus.LOBBY,
+                GameStatus.FINISH,
+                GameStatus.PAUSED)) return;
+        TeamPlayer teamPlayer = getTeamPlayer(event.getPlayer());
+        if (teamPlayer.isTeam(TeamType.DEFENDER)) return;
+        teamPlayer.setAlive(false);
+        SkyDefenderReboot.getInstance().saveGameManager();
+    }
+
+    public void handlePlayerRespawn(PlayerPostRespawnEvent event) {
+
+        Player player = event.getPlayer();
+        TeamPlayer teamPlayer = getTeamPlayer(player);
+
+        switch (GameManager.getInstance().getGameStatus()) {
+            case LOBBY:
+                player.setGameMode(GameMode.ADVENTURE);
+
+            case RUNNING:
+                if (teamPlayer.isAlive()) player.setGameMode(GameMode.SURVIVAL);
+                else player.setGameMode(GameMode.SPECTATOR);
+
+            default:
+                player.setGameMode(GameMode.SPECTATOR);
+                SkyDefenderReboot.getInstance().getLogger()
+                        .warning("PlayerRespawn > cant handle respawn for player " + player.getName() +  " gamemode set to spectator");
+        }
     }
 
     public void resetTeams() {
