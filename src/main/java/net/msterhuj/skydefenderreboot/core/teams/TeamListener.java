@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class TeamListener implements Listener {
     
@@ -57,7 +58,7 @@ public class TeamListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerPostRespawn(PlayerPostRespawnEvent event) {
+    public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
         GameManager.getInstance().getTeamManager().handlePlayerRespawn(event);
     }
 }

@@ -139,7 +139,7 @@ public class TeamManager {
         SkyDefenderReboot.getInstance().saveGameManager();
     }
 
-    public void handlePlayerRespawn(PlayerPostRespawnEvent event) {
+    public void handlePlayerRespawn(PlayerRespawnEvent event) {
 
         Player player = event.getPlayer();
         TeamPlayer teamPlayer = getTeamPlayer(player);
@@ -151,6 +151,8 @@ public class TeamManager {
             case RUNNING:
                 if (teamPlayer.isAlive()) player.setGameMode(GameMode.SURVIVAL);
                 else player.setGameMode(GameMode.SPECTATOR);
+                
+                event.setRespawnLocation(GameManager.getInstance().getSpawnLocation().getLocation());
 
             default:
                 player.setGameMode(GameMode.SPECTATOR);
