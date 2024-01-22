@@ -36,10 +36,9 @@ public class Teleporter {
         this.output = null;
     }
 
-    public void teleportPlayer(Player player, boolean keepPlayerDirection) {
-
+    public void teleportPlayer(Location eventLocation, Player player, boolean keepPlayerDirection) {
         if (this.input != null && this.output != null) {
-            Location destinationLocation = this.getOppositeTeleporterLocation(player.getLocation()).getLocation();
+            Location destinationLocation = this.getOppositeTeleporterLocation(eventLocation).getLocation();
             destinationLocation.setX(destinationLocation.getBlockX() + 0.5);
             destinationLocation.setZ(destinationLocation.getBlockZ() + 0.5);
 

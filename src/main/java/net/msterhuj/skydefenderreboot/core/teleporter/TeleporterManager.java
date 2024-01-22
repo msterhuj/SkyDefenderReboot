@@ -49,7 +49,7 @@ public class TeleporterManager {
         // todo add a cooldown to prevent teleportation loop
         for (Teleporter teleporter : this.teleporters.values()) {
             if (teleporter.isLocationOneOfTeleporter(eventLocation)) {
-                teleporter.teleportPlayer(player, true);
+                teleporter.teleportPlayer(eventLocation, player, true);
                 return;
             }
         }

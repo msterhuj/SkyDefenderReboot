@@ -21,6 +21,5 @@ public class TeleporterListener implements Listener {
             }
         }
     }
-
     // todo add protection to prevent teleport destruction
 }
