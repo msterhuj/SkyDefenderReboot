@@ -41,12 +41,20 @@ public class GameManager {
     }
 
     public void setGameStatus(GameStatus newGameStatus) {
+        SkyDefenderReboot plugin = SkyDefenderReboot.getInstance();
         if (isGameStatus(newGameStatus)) return;
         this.gameStatus = newGameStatus;
         switch (newGameStatus) {
             case RUNNING:
                 applyStarting();
                 break;
+            case RESETTING:
+                getTeamManager().resetTeams();
+                WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+                WorldManager.setDay(0);
+                WorldManager.applyWorldBorder();
+                setGameStatus(GameStatus.LOBBY);
+                plugin.saveGameManager();
             case FINISH:
                 applyRunning();
                 break;
@@ -59,10 +67,8 @@ public class GameManager {
 
     private boolean applyStarting() {
         if (!isGameStatus(GameStatus.STARTING)) return false;
-
         WorldManager.setDay(0);
         WorldManager.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
-
         return true;
     }
 

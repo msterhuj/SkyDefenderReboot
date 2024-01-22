@@ -61,6 +61,7 @@ public class WorldManager {
         worldBorder.setSize(SkyDefenderReboot.getGameConfig().getWorldborderFinishRadius());
     }
 
+    @Deprecated
     public static void setDayBorder(int currentDay) {
         GameConfig gameConfig = SkyDefenderReboot.getGameConfig();
         int startReduceAtDay = gameConfig.getWorldborderStartReduceAtDay();
@@ -79,5 +80,13 @@ public class WorldManager {
                 getWorld().getWorldBorder().setSize(startRadius);
             }
         }
+    }
+
+    public static void applyWorldBorder() {
+        int day = getDay();
+        GameConfig gameConfig = SkyDefenderReboot.getGameConfig();
+
+        if (day < gameConfig.getWorldborderStartReduceAtDay())
+            WorldManager.getWorld().getWorldBorder().setSize(gameConfig.getWorldborderStartRadius());
     }
 }

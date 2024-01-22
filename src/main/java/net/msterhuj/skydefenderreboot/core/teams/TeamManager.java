@@ -1,12 +1,10 @@
 package net.msterhuj.skydefenderreboot.core.teams;
 
 
-import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import lombok.Data;
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.GameManager;
 import net.msterhuj.skydefenderreboot.core.GameStatus;
-import net.msterhuj.skydefenderreboot.core.world.WorldManager;
 import net.msterhuj.skydefenderreboot.utils.GameConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -16,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 

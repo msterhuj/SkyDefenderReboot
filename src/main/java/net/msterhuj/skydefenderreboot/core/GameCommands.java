@@ -67,10 +67,7 @@ public class GameCommands {
         // reset
         if (strings[1].equalsIgnoreCase("reset")) {
             // move this to game manager reset method
-            TeamManager teamManager = gameManager.getTeamManager();
-            teamManager.resetTeams();
-            gameManager.setGameStatus(GameStatus.LOBBY);
-            plugin.saveGameManager();
+            gameManager.setGameStatus(GameStatus.RESETTING);
             commandSender.sendMessage("§aGame reset");
             return true;
         }
