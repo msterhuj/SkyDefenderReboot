@@ -14,9 +14,9 @@ public class GameConfig {
 
     private int worldborderStartReduceAtDay;
     private int worldborderFinishReduceAtDay;
-    private int worldborderStartRadius;
-    private int worldborderFinishRadius;
-    private int worldborderMovementTime;
+    private double worldborderStartRadius;
+    private double worldborderFinishRadius;
+    private long worldborderMovementTime;
 
     public GameConfig() {
         load();
@@ -33,9 +33,9 @@ public class GameConfig {
 
         worldborderStartReduceAtDay = fileConfiguration.getInt("worldborder.start_reduce_at_day");
         worldborderFinishReduceAtDay = fileConfiguration.getInt("worldborder.finish_reduce_at_day");
-        worldborderStartRadius = fileConfiguration.getInt("worldborder.start_radius");
-        worldborderFinishRadius = fileConfiguration.getInt("worldborder.finish_radius");
-        worldborderMovementTime = fileConfiguration.getInt("worldborder.movement_time");
+        worldborderStartRadius = fileConfiguration.getDouble("worldborder.start_radius");
+        worldborderFinishRadius = fileConfiguration.getDouble("worldborder.finish_radius");
+        worldborderMovementTime = fileConfiguration.getLong("worldborder.movement_time");
     }
 
     public void reload() {

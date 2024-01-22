@@ -58,35 +58,26 @@ public class WorldManager {
     public static void setupBorderCenter(Location location) {
         WorldBorder worldBorder = getWorld().getWorldBorder();
         worldBorder.setCenter(location);
-        worldBorder.setSize(SkyDefenderReboot.getGameConfig().getWorldborderFinishRadius());
+        worldBorder.setSize(SkyDefenderReboot.getGameConfig().getWorldborderStartRadius());
     }
 
-    @Deprecated
-    public static void setDayBorder(int currentDay) {
-        GameConfig gameConfig = SkyDefenderReboot.getGameConfig();
-        int startReduceAtDay = gameConfig.getWorldborderStartReduceAtDay();
-        int finishReduceAtDay = gameConfig.getWorldborderFinishReduceAtDay();
-        int startRadius = gameConfig.getWorldborderStartRadius();
-        int finishRadius = gameConfig.getWorldborderFinishRadius();
+    public static double getBorderSizeForDay(int day) {
+        GameConfig config = SkyDefenderReboot.getGameConfig();
+        int startDay = config.getWorldborderStartReduceAtDay();
+        int finishDay = config.getWorldborderFinishReduceAtDay();
+        double startRadius = config.getWorldborderStartRadius();
+        double finishRadius = config.getWorldborderFinishRadius();
 
-        if (currentDay >= startReduceAtDay) {
-            double blocksPerDay = (double) (startRadius - finishRadius) / (finishReduceAtDay - startReduceAtDay);
-            double blocksToReduce = blocksPerDay * (currentDay - startReduceAtDay);
-            double newRadius = startRadius - blocksToReduce;
-            getWorld().getWorldBorder() .setSize(newRadius, gameConfig.getWorldborderMovementTime() * 20L);
-        } else {
-            double currentRadius = getWorld().getWorldBorder().getSize();
-            if (currentRadius != startRadius) {
-                getWorld().getWorldBorder().setSize(startRadius);
-            }
-        }
+        if (day < startDay) return startRadius;
+        else if (day > finishDay) return finishRadius;
+
+        double blockToReducePerDay = (startRadius - finishRadius) / (finishDay - startDay);
+        double reduce = startRadius - blockToReducePerDay * (day - startDay);
+
+        return Math.max(reduce, finishRadius);
     }
 
     public static void applyWorldBorder() {
-        int day = getDay();
-        GameConfig gameConfig = SkyDefenderReboot.getGameConfig();
-
-        if (day < gameConfig.getWorldborderStartReduceAtDay())
-            WorldManager.getWorld().getWorldBorder().setSize(gameConfig.getWorldborderStartRadius());
+        getWorld().getWorldBorder().setSize(getBorderSizeForDay(getDay()));
     }
 }

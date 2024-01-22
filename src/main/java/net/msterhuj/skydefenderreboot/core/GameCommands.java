@@ -55,7 +55,7 @@ public class GameCommands {
             }
 
             WorldManager.setDay(0);
-            WorldManager.setDayBorder(1);
+            WorldManager.applyWorldBorder();
             teamManager.spreadPlayers();
 
 

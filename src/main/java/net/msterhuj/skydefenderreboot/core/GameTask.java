@@ -37,7 +37,7 @@ public class GameTask extends BukkitRunnable {
         }
         // check if worldborder should be shrunk
         if (SkyDefenderReboot.getGameConfig().getWorldborderStartReduceAtDay() >= this.cache.getCurrentDay()) {
-            WorldManager.setDayBorder(this.cache.getCurrentDay());
+            WorldManager.applyWorldBorder();
         }
     }
 }
