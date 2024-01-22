@@ -169,4 +169,8 @@ public class TeamManager {
     public void resetTeams() {
         teamPlayers.forEach(teamPlayer -> teamPlayer.setTeamType(TeamType.SPECTATOR));
     }
+
+    public boolean isBannersSet() {
+        return GameManager.getInstance().getBannerLocation().getLocation().getBlock().getType().name().contains("BANNER");
+    }
 }

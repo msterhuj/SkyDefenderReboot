@@ -3,9 +3,11 @@ package net.msterhuj.skydefenderreboot.core.world;
 import net.msterhuj.skydefenderreboot.SkyDefenderReboot;
 import net.msterhuj.skydefenderreboot.core.teams.TeamPlayer;
 import net.msterhuj.skydefenderreboot.core.teams.TeamType;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 
 public class WorldListener implements Listener {
@@ -18,6 +20,7 @@ public class WorldListener implements Listener {
         TeamPlayer teamPlayer = SkyDefenderReboot.getGameManager().getTeamManager().getTeamPlayer(event.getPlayer());
         if (event.getTo().getWorld().getEnvironment() == World.Environment.NETHER) {
             if (currentDay < allowNetherAtDay && !teamPlayer.isTeam(TeamType.DEFENDER)) {
+                event.getPlayer().sendMessage("§cYou can't go to the nether before day " + allowNetherAtDay + "!");
                 event.setCancelled(true);
             }
         }

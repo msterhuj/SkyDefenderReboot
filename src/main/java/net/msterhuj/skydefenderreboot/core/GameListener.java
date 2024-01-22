@@ -6,6 +6,7 @@ import net.msterhuj.skydefenderreboot.core.teams.TeamPlayer;
 import net.msterhuj.skydefenderreboot.core.teams.TeamType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -51,6 +52,7 @@ public class GameListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (GameManager.getInstance().isGameStatus(GameStatus.LOBBY, GameStatus.PAUSED) && !event.getPlayer().isOp()) {
+            if (event instanceof Player) event.getPlayer().sendMessage("§cYou can't place blocks now");
             event.setCancelled(true);
         }
     }

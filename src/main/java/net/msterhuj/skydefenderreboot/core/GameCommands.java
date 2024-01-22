@@ -47,10 +47,15 @@ public class GameCommands {
                 return true;
             }
 
+            // check if banners are set
+            if (!teamManager.isBannersSet()) {
+                commandSender.sendMessage("§cYou need to set banners first");
+                gameManager.setGameStatus(GameStatus.LOBBY);
+                return true;
+            }
+
             WorldManager.setDay(0);
             WorldManager.setDayBorder(1);
-
-            // todo add multi thread for teleporting players and add countdown
             teamManager.spreadPlayers();
 
 
