@@ -12,31 +12,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 
 public class GameListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        // todo move this to team manager on a method called "checkIfTeamWins"
-        // todo add a check when attacker is not online but its alive create a timer before defender team wins
-        // todo if defender team is not online the game automatically pause after 5 minutes
-        TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
-        TeamPlayer teamPlayer = teamManager.getTeamPlayer(event.getEntity());
-        if (SkyDefenderReboot.getGameManager().isGameStatus(GameStatus.RUNNING)) {
-            if (teamPlayer.getTeamType() == TeamType.ATTACKER) {
-                // check if he's the last one in the attacker team
-                if (teamManager.getTeamPlayers().stream().filter(teamPlayer1 -> teamPlayer1.getTeamType() == TeamType.ATTACKER).count() == 1) { // todo redo this cause it's not logic :sob:
-                    // defender team wins
-                    Bukkit.broadcastMessage("§aDefender team wins!");
-                    SkyDefenderReboot.getGameManager().setGameStatus(GameStatus.FINISH);
-                    SkyDefenderReboot.getInstance().saveGameManager();
-                }
-            }
-        }
+        GameManager.getInstance().getTeamManager().handlePlayerDeath(event);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -50,11 +33,21 @@ public class GameListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
+    public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
+        GameManager.getInstance().getTeamManager().handlePlayerRespawn(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (GameManager.getInstance().isGameStatus(GameStatus.LOBBY, GameStatus.PAUSED) && !event.getPlayer().isOp()) {
             if (event instanceof Player) event.getPlayer().sendMessage("§cYou can't place blocks now");
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        GameManager.getInstance().getTeamManager().handlePlayerJoin(event);
     }
 
     @EventHandler(ignoreCancelled = true)

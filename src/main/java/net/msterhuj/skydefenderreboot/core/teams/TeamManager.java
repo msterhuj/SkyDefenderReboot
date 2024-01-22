@@ -11,8 +11,10 @@ import net.msterhuj.skydefenderreboot.utils.GameConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scoreboard.Team;
 
@@ -129,14 +131,36 @@ public class TeamManager {
     }
 
     public void handlePlayerDeath(PlayerDeathEvent event) {
+        // death
         if (GameManager.getInstance().isGameStatus(
                 GameStatus.LOBBY,
                 GameStatus.FINISH,
-                GameStatus.PAUSED)) return;
+                GameStatus.PAUSED)) {
+            event.setCancelled(true);
+            return;
+        }
         TeamPlayer teamPlayer = getTeamPlayer(event.getPlayer());
         if (teamPlayer.isTeam(TeamType.DEFENDER)) return;
         teamPlayer.setAlive(false);
         SkyDefenderReboot.getInstance().saveGameManager();
+
+        // todo move this code to other function
+        // todo move this to team manager on a method called "checkIfTeamWins"
+        // todo add a check when attacker is not online but its alive create a timer before defender team wins
+        // todo if defender team is not online the game automatically pause after 5 minutes
+        // check if game win
+        TeamManager teamManager = SkyDefenderReboot.getGameManager().getTeamManager();
+        if (SkyDefenderReboot.getGameManager().isGameStatus(GameStatus.RUNNING)) {
+            if (teamPlayer.getTeamType() == TeamType.ATTACKER) {
+                // check if he's the last one in the attacker team
+                if (teamManager.getTeamPlayers().stream().filter(teamPlayer1 -> teamPlayer1.getTeamType() == TeamType.ATTACKER).count() == 1) { // todo redo this cause it's not logic :sob:
+                    // defender team wins
+                    Bukkit.broadcastMessage("§aDefender team wins!");
+                    SkyDefenderReboot.getGameManager().setGameStatus(GameStatus.FINISH);
+                    SkyDefenderReboot.getInstance().saveGameManager();
+                }
+            }
+        }
     }
 
     public void handlePlayerRespawn(PlayerRespawnEvent event) {
@@ -158,6 +182,42 @@ public class TeamManager {
                 player.setGameMode(GameMode.SPECTATOR);
                 SkyDefenderReboot.getInstance().getLogger()
                         .warning("PlayerRespawn > cant handle respawn for player " + player.getName() +  " gamemode set to spectator");
+        }
+    }
+
+    public void handlePlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        Server server = SkyDefenderReboot.getInstance().getServer();
+        TeamManager teamManager = GameManager.getInstance().getTeamManager();
+        if (teamManager.registerPlayer(player)) SkyDefenderReboot.getInstance().saveGameManager();
+
+        switch (SkyDefenderReboot.getGameManager().getGameStatus()) {
+            case LOBBY:
+                server.broadcastMessage("§aWaiting for players...");
+                if (!player.isOp()) {
+                    player.setGameMode(GameMode.ADVENTURE);
+                    if (GameManager.getInstance().getSpawnLocation() == null) {
+                        player.sendMessage("§cSpawn location not set!");
+                        SkyDefenderReboot.getInstance().getLogger().warning("Spawn location not set player " + player.getName() + " cannot be teleported to spawn!");
+                    } else player.teleport(SkyDefenderReboot.getGameManager().getSpawnLocation().getLocation().add(0.5, 0.2, 0.5));
+                }
+                break;
+
+            case RUNNING:
+                server.broadcastMessage("§aGame started!");
+                TeamPlayer teamPlayer = teamManager.getTeamPlayer(player);
+                if (teamPlayer.isTeam(TeamType.SPECTATOR)) player.setGameMode(GameMode.SPECTATOR);
+                if (!teamPlayer.isAlive()) player.setGameMode(GameMode.SPECTATOR);
+                break;
+
+            case PAUSED:
+                server.broadcastMessage("§aGame paused!");
+                break;
+
+            case FINISH:
+                server.broadcastMessage("§aGame finished!");
+                player.setGameMode(GameMode.SPECTATOR);
+                break;
         }
     }
 

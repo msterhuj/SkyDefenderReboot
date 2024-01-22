@@ -1,7 +1,6 @@
 package net.msterhuj.skydefenderreboot;
 
 import net.msterhuj.skydefenderreboot.core.GameListener;
-import net.msterhuj.skydefenderreboot.core.teams.TeamListener;
 import net.msterhuj.skydefenderreboot.core.teleporter.TeleporterListener;
 import net.msterhuj.skydefenderreboot.core.world.WorldListener;
 import org.bukkit.event.HandlerList;
@@ -25,7 +24,6 @@ public class ListenerManager {
     public ListenerManager(SkyDefenderReboot plugin) {
         registerListeners(plugin,
                 new TeleporterListener(),
-                new TeamListener(),
                 new GameListener(),
                 new WorldListener());
     }
